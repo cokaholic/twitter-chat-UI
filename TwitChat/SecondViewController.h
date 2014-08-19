@@ -9,11 +9,21 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
+#import "GTMOAuthAuthentication.h"
+#import "GTMOAuthViewControllerTouch.h"
+
 @interface SecondViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
     UITableView *followerTableView;
-    NSMutableArray *followerArray;
     NSMutableArray *userImgArray;
     BOOL imgLoadFlag;
+    
+    GTMOAuthAuthentication* _auth;
+    NSArray* _followerIDs;
+    NSArray* _followingIDs;
+    NSArray* _friendIDs;
+    NSMutableArray* _friends;
+    
+    int _userInfoFetchCounter;
 }
 @end

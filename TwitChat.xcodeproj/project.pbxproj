@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		38429B1319A2E7440072941B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38429B1219A2E7440072941B /* SystemConfiguration.framework */; };
+		38429B1519A2E74B0072941B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38429B1419A2E74B0072941B /* Security.framework */; };
+		38429B1F19A2E7A00072941B /* GTMOAuthViewControllerTouch.m in Sources */ = {isa = PBXBuildFile; fileRef = 38429B1919A2E7A00072941B /* GTMOAuthViewControllerTouch.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		38429B2019A2E7A00072941B /* GTMOAuthViewTouch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38429B1A19A2E7A00072941B /* GTMOAuthViewTouch.xib */; };
+		38429B2119A2E7A00072941B /* GTMOAuthAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 38429B1C19A2E7A00072941B /* GTMOAuthAuthentication.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		38429B2219A2E7A00072941B /* GTMOAuthSignIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 38429B1E19A2E7A00072941B /* GTMOAuthSignIn.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		38429B2519A2E7CC0072941B /* GTMHTTPFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 38429B2419A2E7CC0072941B /* GTMHTTPFetcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		38429B2919A30C910072941B /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 38429B2819A30C910072941B /* UIImageView+WebCache.m */; };
 		9F0256A019A1DD4E00E58955 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F02569F19A1DD4E00E58955 /* Foundation.framework */; };
 		9F0256A219A1DD4E00E58955 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F0256A119A1DD4E00E58955 /* CoreGraphics.framework */; };
 		9F0256A419A1DD4E00E58955 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F0256A319A1DD4E00E58955 /* UIKit.framework */; };
@@ -38,6 +46,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		38429B1219A2E7440072941B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		38429B1419A2E74B0072941B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		38429B1819A2E7A00072941B /* GTMOAuthViewControllerTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMOAuthViewControllerTouch.h; sourceTree = "<group>"; };
+		38429B1919A2E7A00072941B /* GTMOAuthViewControllerTouch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMOAuthViewControllerTouch.m; sourceTree = "<group>"; };
+		38429B1A19A2E7A00072941B /* GTMOAuthViewTouch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GTMOAuthViewTouch.xib; sourceTree = "<group>"; };
+		38429B1B19A2E7A00072941B /* GTMOAuthAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMOAuthAuthentication.h; sourceTree = "<group>"; };
+		38429B1C19A2E7A00072941B /* GTMOAuthAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMOAuthAuthentication.m; sourceTree = "<group>"; };
+		38429B1D19A2E7A00072941B /* GTMOAuthSignIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMOAuthSignIn.h; sourceTree = "<group>"; };
+		38429B1E19A2E7A00072941B /* GTMOAuthSignIn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMOAuthSignIn.m; sourceTree = "<group>"; };
+		38429B2319A2E7CC0072941B /* GTMHTTPFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMHTTPFetcher.h; sourceTree = "<group>"; };
+		38429B2419A2E7CC0072941B /* GTMHTTPFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMHTTPFetcher.m; sourceTree = "<group>"; };
+		38429B2719A30C910072941B /* UIImageView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+WebCache.h"; sourceTree = "<group>"; };
+		38429B2819A30C910072941B /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		9F02569C19A1DD4E00E58955 /* TwitChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F02569F19A1DD4E00E58955 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9F0256A119A1DD4E00E58955 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -72,6 +93,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38429B1519A2E74B0072941B /* Security.framework in Frameworks */,
+				38429B1319A2E7440072941B /* SystemConfiguration.framework in Frameworks */,
 				9FA6984519A1EF7000FF9E4C /* QuartzCore.framework in Frameworks */,
 				9F0256A219A1DD4E00E58955 /* CoreGraphics.framework in Frameworks */,
 				9F0256A419A1DD4E00E58955 /* UIKit.framework in Frameworks */,
@@ -92,6 +115,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		38429B1619A2E76B0072941B /* GTMOAuth */ = {
+			isa = PBXGroup;
+			children = (
+				38429B1819A2E7A00072941B /* GTMOAuthViewControllerTouch.h */,
+				38429B1919A2E7A00072941B /* GTMOAuthViewControllerTouch.m */,
+				38429B1A19A2E7A00072941B /* GTMOAuthViewTouch.xib */,
+				38429B1B19A2E7A00072941B /* GTMOAuthAuthentication.h */,
+				38429B1C19A2E7A00072941B /* GTMOAuthAuthentication.m */,
+				38429B1D19A2E7A00072941B /* GTMOAuthSignIn.h */,
+				38429B1E19A2E7A00072941B /* GTMOAuthSignIn.m */,
+			);
+			name = GTMOAuth;
+			sourceTree = "<group>";
+		};
+		38429B1719A2E77A0072941B /* GTMHTTPFetcher */ = {
+			isa = PBXGroup;
+			children = (
+				38429B2319A2E7CC0072941B /* GTMHTTPFetcher.h */,
+				38429B2419A2E7CC0072941B /* GTMHTTPFetcher.m */,
+			);
+			name = GTMHTTPFetcher;
+			sourceTree = "<group>";
+		};
+		38429B2619A30C780072941B /* SDImage */ = {
+			isa = PBXGroup;
+			children = (
+				38429B2719A30C910072941B /* UIImageView+WebCache.h */,
+				38429B2819A30C910072941B /* UIImageView+WebCache.m */,
+			);
+			name = SDImage;
+			sourceTree = "<group>";
+		};
 		9F02569319A1DD4E00E58955 = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +169,8 @@
 		9F02569E19A1DD4E00E58955 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				38429B1419A2E74B0072941B /* Security.framework */,
+				38429B1219A2E7440072941B /* SystemConfiguration.framework */,
 				9FA6984419A1EF7000FF9E4C /* QuartzCore.framework */,
 				9F02569F19A1DD4E00E58955 /* Foundation.framework */,
 				9F0256A119A1DD4E00E58955 /* CoreGraphics.framework */,
@@ -128,7 +185,10 @@
 			children = (
 				9F0256AE19A1DD4E00E58955 /* AppDelegate.h */,
 				9F0256AF19A1DD4E00E58955 /* AppDelegate.m */,
+				38429B1719A2E77A0072941B /* GTMHTTPFetcher */,
+				38429B1619A2E76B0072941B /* GTMOAuth */,
 				9F0256CE19A1DD5B00E58955 /* FirstViewController.h */,
+				38429B2619A30C780072941B /* SDImage */,
 				9F0256CF19A1DD5B00E58955 /* FirstViewController.m */,
 				9F02571519A1E4AD00E58955 /* SecondViewController.h */,
 				9F02571619A1E4AD00E58955 /* SecondViewController.m */,
@@ -257,6 +317,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F0256AA19A1DD4E00E58955 /* InfoPlist.strings in Resources */,
+				38429B2019A2E7A00072941B /* GTMOAuthViewTouch.xib in Resources */,
 				9F0256B219A1DD4E00E58955 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,9 +337,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38429B2219A2E7A00072941B /* GTMOAuthSignIn.m in Sources */,
 				9FA6984C19A1FE4800FF9E4C /* JWBlurView.m in Sources */,
+				38429B2919A30C910072941B /* UIImageView+WebCache.m in Sources */,
 				9FA6984B19A1FE4800FF9E4C /* UIViewController+ENPopUp.m in Sources */,
+				38429B2119A2E7A00072941B /* GTMOAuthAuthentication.m in Sources */,
+				38429B2519A2E7CC0072941B /* GTMHTTPFetcher.m in Sources */,
 				9F02571719A1E4AD00E58955 /* SecondViewController.m in Sources */,
+				38429B1F19A2E7A00072941B /* GTMOAuthViewControllerTouch.m in Sources */,
 				9F02571A19A1E4BD00E58955 /* ThirdViewController.m in Sources */,
 				9F0256B019A1DD4E00E58955 /* AppDelegate.m in Sources */,
 				9F0256D019A1DD5B00E58955 /* FirstViewController.m in Sources */,
