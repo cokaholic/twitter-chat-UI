@@ -12,6 +12,7 @@
 #import "GTMOAuthAuthentication.h"
 #import "GTMOAuthViewControllerTouch.h"
 #import "UIImageView+WebCache.h"
+#import "AuthManager.h"
 
 @interface SecondViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {

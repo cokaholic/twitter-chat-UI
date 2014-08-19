@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
     self.title = @"トーク";
-    
+
     groupArray = [NSMutableArray arrayWithObjects:@"ゆっちー",@"たつみん",@"ティム", nil];
     
     groupTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-50) style:UITableViewStyleGrouped];
@@ -44,8 +44,23 @@
     UIBarButtonItem *addBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                            target:self
                                                                            action:@selector(addTalkGroup)];
-
+    
     self.navigationItem.rightBarButtonItem = addBtn;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if ([AuthManager sharedManager].auth == nil) {
+        
+        UINavigationController *navc = [[UINavigationController alloc]initWithRootViewController:[[SigninViewController alloc]init]];
+        [self presentViewController:navc animated:YES completion:nil];
+        
+    } else {
+
+        
+    }
+    
 }
 
 #pragma mark - UITableView DataSource

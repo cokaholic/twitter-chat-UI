@@ -8,10 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+#import "SigninViewController.h"
+#import "AuthManager.h"
+
 @interface FirstViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
     UITableView *groupTableView;
     NSMutableArray *groupArray;
+    GTMOAuthAuthentication* _auth;
 }
 
 @end

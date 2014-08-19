@@ -42,30 +42,11 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     [self.view addSubview:followerTableView];
     [followerTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
     
-    
     // GTMOAuthAuthenticationインスタンス生成
-    NSString *consumerKey = @"49mYoMGJDyrbjfQGhwfbCJDv0";
-    NSString *consumerSecret = @"OEJXK8UXMJdnxkQvrB2IBPVLYFetmQ3AuHUkAkC8UhOtFE0kuc";
-    _auth = [[GTMOAuthAuthentication alloc]
-             initWithSignatureMethod:kGTMOAuthSignatureMethodHMAC_SHA1
-             consumerKey:consumerKey
-             privateKey:consumerSecret];
     
-    // 既にOAuth認証済みであればKeyChainから認証情報を読み込む
-    BOOL authorized = [GTMOAuthViewControllerTouch
-                       authorizeFromKeychainForName:kKeychainAppServiceName
-                       authentication:_auth];
-    
-    if (authorized) {
-        // 認証済みの場合はタイムライン更新
-        [self asyncShowFriends];
-        //[self getFriend];
-    } else {
-        // 未認証の場合は認証処理を実施
-        [self asyncSignIn];
-    }
-    
-    NSLog(@"%@\n%@", _auth.accessToken, _auth.tokenSecret);
+    _auth = [AuthManager sharedManager].auth;
+
+    [self asyncShowFriends];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -145,66 +126,6 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     // Dispose of any resources that can be recreated.
 }
 
-// 認証処理
-- (void)asyncSignIn
-{
-    NSString *requestTokenURL = @"https://api.twitter.com/oauth/request_token";
-    NSString *accessTokenURL = @"https://api.twitter.com/oauth/access_token";
-    NSString *authorizeURL = @"https://api.twitter.com/oauth/authorize";
-    
-    _auth.serviceProvider = @"Twitter";
-    _auth.callback = @"http://www.example.com/OAuthCallback";
-    
-    GTMOAuthViewControllerTouch *viewController;
-    viewController = [[GTMOAuthViewControllerTouch alloc]
-                      initWithScope:nil
-                      language:nil
-                      requestTokenURL:[NSURL URLWithString:requestTokenURL]
-                      authorizeTokenURL:[NSURL URLWithString:authorizeURL]
-                      accessTokenURL:[NSURL URLWithString:accessTokenURL]
-                      authentication:_auth
-                      appServiceName:kKeychainAppServiceName
-                      delegate:self
-                      finishedSelector:@selector(authViewContoller:finishWithAuth:error:)];
-    [[self navigationController] pushViewController:viewController animated:YES];
-}
-
-// 認証エラー表示AlertViewタグ
-static const int kMyAlertViewTagAuthenticationError = 1;
-
-// 認証処理が完了した場合の処理
-- (void)authViewContoller:(GTMOAuthViewControllerTouch *)viewContoller
-           finishWithAuth:(GTMOAuthAuthentication *)auth
-                    error:(NSError *)error
-{
-    if (error != nil) {
-        // 認証失敗
-        NSLog(@"Authentication error: %d.", (int)error.code);
-        UIAlertView *alertView;
-        alertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                               message:@"Authentication failed."
-                                              delegate:self
-                                     cancelButtonTitle:@"Confirm"
-                                     otherButtonTitles:nil];
-        alertView.tag = kMyAlertViewTagAuthenticationError;
-        [alertView show];
-    } else {
-        // 認証成功
-        NSLog(@"Authentication succeeded.");
-        // タイムライン表示
-        [self asyncShowFriends];
-    }
-}
-
-// UIAlertViewが閉じられた時
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    // 認証失敗通知AlertViewが閉じられた場合
-    if (alertView.tag == kMyAlertViewTagAuthenticationError) {
-        // 再度認証
-        [self asyncSignIn];
-    }
-}
 
 // デフォルトのタイムライン処理表示
 - (void)asyncShowFriends

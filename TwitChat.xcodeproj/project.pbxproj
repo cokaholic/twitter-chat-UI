@@ -30,6 +30,8 @@
 		38429B5919A30F190072941B /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 38429B4719A30F180072941B /* UIImageView+HighlightedWebCache.m */; };
 		38429B5A19A30F190072941B /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 38429B4919A30F180072941B /* UIImageView+WebCache.m */; };
 		38429B5B19A30F190072941B /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 38429B4B19A30F180072941B /* UIView+WebCacheOperation.m */; };
+		388CEEB919A34EA4008B000D /* SigninViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 388CEEB819A34EA4008B000D /* SigninViewController.m */; };
+		388CEEC219A36A34008B000D /* AuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 388CEEC119A36A34008B000D /* AuthManager.m */; };
 		9F0256A019A1DD4E00E58955 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F02569F19A1DD4E00E58955 /* Foundation.framework */; };
 		9F0256A219A1DD4E00E58955 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F0256A119A1DD4E00E58955 /* CoreGraphics.framework */; };
 		9F0256A419A1DD4E00E58955 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F0256A319A1DD4E00E58955 /* UIKit.framework */; };
@@ -105,6 +107,10 @@
 		38429B4919A30F180072941B /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		38429B4A19A30F180072941B /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		38429B4B19A30F180072941B /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
+		388CEEB719A34EA4008B000D /* SigninViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SigninViewController.h; sourceTree = "<group>"; };
+		388CEEB819A34EA4008B000D /* SigninViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SigninViewController.m; sourceTree = "<group>"; };
+		388CEEC019A36A34008B000D /* AuthManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthManager.h; sourceTree = "<group>"; };
+		388CEEC119A36A34008B000D /* AuthManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthManager.m; sourceTree = "<group>"; };
 		9F02569C19A1DD4E00E58955 /* TwitChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F02569F19A1DD4E00E58955 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9F0256A119A1DD4E00E58955 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -267,10 +273,14 @@
 				38429B1619A2E76B0072941B /* GTMOAuth */,
 				9F0256CE19A1DD5B00E58955 /* FirstViewController.h */,
 				9F0256CF19A1DD5B00E58955 /* FirstViewController.m */,
+				388CEEB719A34EA4008B000D /* SigninViewController.h */,
+				388CEEB819A34EA4008B000D /* SigninViewController.m */,
 				9F02571519A1E4AD00E58955 /* SecondViewController.h */,
 				9F02571619A1E4AD00E58955 /* SecondViewController.m */,
 				9F02571819A1E4BD00E58955 /* ThirdViewController.h */,
 				9F02571919A1E4BD00E58955 /* ThirdViewController.m */,
+				388CEEC019A36A34008B000D /* AuthManager.h */,
+				388CEEC119A36A34008B000D /* AuthManager.m */,
 				9F0256B119A1DD4E00E58955 /* Images.xcassets */,
 				9F0256A619A1DD4E00E58955 /* Supporting Files */,
 			);
@@ -421,6 +431,8 @@
 				38429B5219A30F180072941B /* SDWebImageDownloaderOperation.m in Sources */,
 				9FA6984B19A1FE4800FF9E4C /* UIViewController+ENPopUp.m in Sources */,
 				38429B4E19A30F180072941B /* SDImageCache.m in Sources */,
+				388CEEB919A34EA4008B000D /* SigninViewController.m in Sources */,
+				388CEEC219A36A34008B000D /* AuthManager.m in Sources */,
 				38429B4D19A30F180072941B /* NSData+ImageContentType.m in Sources */,
 				38429B2119A2E7A00072941B /* GTMOAuthAuthentication.m in Sources */,
 				38429B5019A30F180072941B /* SDWebImageDecoder.m in Sources */,
