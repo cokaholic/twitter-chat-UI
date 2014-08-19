@@ -19,6 +19,12 @@
 		9F0256BB19A1DD4E00E58955 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F0256A319A1DD4E00E58955 /* UIKit.framework */; };
 		9F0256C319A1DD4E00E58955 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9F0256C119A1DD4E00E58955 /* InfoPlist.strings */; };
 		9F0256C519A1DD4E00E58955 /* TwitChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F0256C419A1DD4E00E58955 /* TwitChatTests.m */; };
+		9F0256D019A1DD5B00E58955 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F0256CF19A1DD5B00E58955 /* FirstViewController.m */; };
+		9F02571719A1E4AD00E58955 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F02571619A1E4AD00E58955 /* SecondViewController.m */; };
+		9F02571A19A1E4BD00E58955 /* ThirdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F02571919A1E4BD00E58955 /* ThirdViewController.m */; };
+		9FA6984519A1EF7000FF9E4C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FA6984419A1EF7000FF9E4C /* QuartzCore.framework */; };
+		9FA6984B19A1FE4800FF9E4C /* UIViewController+ENPopUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FA6984719A1FE4800FF9E4C /* UIViewController+ENPopUp.m */; };
+		9FA6984C19A1FE4800FF9E4C /* JWBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FA6984919A1FE4800FF9E4C /* JWBlurView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +54,17 @@
 		9F0256C019A1DD4E00E58955 /* TwitChatTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TwitChatTests-Info.plist"; sourceTree = "<group>"; };
 		9F0256C219A1DD4E00E58955 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9F0256C419A1DD4E00E58955 /* TwitChatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TwitChatTests.m; sourceTree = "<group>"; };
+		9F0256CE19A1DD5B00E58955 /* FirstViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
+		9F0256CF19A1DD5B00E58955 /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
+		9F02571519A1E4AD00E58955 /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
+		9F02571619A1E4AD00E58955 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		9F02571819A1E4BD00E58955 /* ThirdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThirdViewController.h; sourceTree = "<group>"; };
+		9F02571919A1E4BD00E58955 /* ThirdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThirdViewController.m; sourceTree = "<group>"; };
+		9FA6984419A1EF7000FF9E4C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		9FA6984719A1FE4800FF9E4C /* UIViewController+ENPopUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ENPopUp.m"; sourceTree = "<group>"; };
+		9FA6984819A1FE4800FF9E4C /* UIViewController+ENPopUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ENPopUp.h"; sourceTree = "<group>"; };
+		9FA6984919A1FE4800FF9E4C /* JWBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JWBlurView.m; sourceTree = "<group>"; };
+		9FA6984A19A1FE4800FF9E4C /* JWBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JWBlurView.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FA6984519A1EF7000FF9E4C /* QuartzCore.framework in Frameworks */,
 				9F0256A219A1DD4E00E58955 /* CoreGraphics.framework in Frameworks */,
 				9F0256A419A1DD4E00E58955 /* UIKit.framework in Frameworks */,
 				9F0256A019A1DD4E00E58955 /* Foundation.framework in Frameworks */,
@@ -96,6 +114,7 @@
 		9F02569E19A1DD4E00E58955 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9FA6984419A1EF7000FF9E4C /* QuartzCore.framework */,
 				9F02569F19A1DD4E00E58955 /* Foundation.framework */,
 				9F0256A119A1DD4E00E58955 /* CoreGraphics.framework */,
 				9F0256A319A1DD4E00E58955 /* UIKit.framework */,
@@ -109,6 +128,12 @@
 			children = (
 				9F0256AE19A1DD4E00E58955 /* AppDelegate.h */,
 				9F0256AF19A1DD4E00E58955 /* AppDelegate.m */,
+				9F0256CE19A1DD5B00E58955 /* FirstViewController.h */,
+				9F0256CF19A1DD5B00E58955 /* FirstViewController.m */,
+				9F02571519A1E4AD00E58955 /* SecondViewController.h */,
+				9F02571619A1E4AD00E58955 /* SecondViewController.m */,
+				9F02571819A1E4BD00E58955 /* ThirdViewController.h */,
+				9F02571919A1E4BD00E58955 /* ThirdViewController.m */,
 				9F0256B119A1DD4E00E58955 /* Images.xcassets */,
 				9F0256A619A1DD4E00E58955 /* Supporting Files */,
 			);
@@ -118,6 +143,7 @@
 		9F0256A619A1DD4E00E58955 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9FA6984619A1FE0400FF9E4C /* Library */,
 				9F0256A719A1DD4E00E58955 /* TwitChat-Info.plist */,
 				9F0256A819A1DD4E00E58955 /* InfoPlist.strings */,
 				9F0256AB19A1DD4E00E58955 /* main.m */,
@@ -142,6 +168,17 @@
 				9F0256C119A1DD4E00E58955 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9FA6984619A1FE0400FF9E4C /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				9FA6984819A1FE4800FF9E4C /* UIViewController+ENPopUp.h */,
+				9FA6984719A1FE4800FF9E4C /* UIViewController+ENPopUp.m */,
+				9FA6984A19A1FE4800FF9E4C /* JWBlurView.h */,
+				9FA6984919A1FE4800FF9E4C /* JWBlurView.m */,
+			);
+			name = Library;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,7 +276,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FA6984C19A1FE4800FF9E4C /* JWBlurView.m in Sources */,
+				9FA6984B19A1FE4800FF9E4C /* UIViewController+ENPopUp.m in Sources */,
+				9F02571719A1E4AD00E58955 /* SecondViewController.m in Sources */,
+				9F02571A19A1E4BD00E58955 /* ThirdViewController.m in Sources */,
 				9F0256B019A1DD4E00E58955 /* AppDelegate.m in Sources */,
+				9F0256D019A1DD5B00E58955 /* FirstViewController.m in Sources */,
 				9F0256AC19A1DD4E00E58955 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -314,6 +356,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$SDKROOT/usr/include/libxml2/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -346,6 +393,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$SDKROOT/usr/include/libxml2/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -437,6 +489,7 @@
 				9F0256CA19A1DD4E00E58955 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9F0256CB19A1DD4E00E58955 /* Build configuration list for PBXNativeTarget "TwitChatTests" */ = {
 			isa = XCConfigurationList;
@@ -445,6 +498,7 @@
 				9F0256CD19A1DD4E00E58955 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

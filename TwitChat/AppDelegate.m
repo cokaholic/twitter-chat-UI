@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "FirstViewController.h"
+#import "SecondViewController.h"
+#import "ThirdViewController.h"
 
 @implementation AppDelegate
 
@@ -16,6 +19,25 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
+    UITabBarController *tabController = [[UITabBarController alloc]init];
+    UITabBarItem *tab1 = [[UITabBarItem alloc]initWithTitle:@"トーク" image:nil tag:1];
+    UINavigationController *navigationController1 = [[UINavigationController alloc]initWithRootViewController:[[FirstViewController alloc]init]];
+    [navigationController1 setTabBarItem:tab1];
+    
+    UITabBarItem *tab2 = [[UITabBarItem alloc]initWithTitle:@"フォロワー" image:nil tag:2];
+    UINavigationController *navigationController2 = [[UINavigationController alloc]initWithRootViewController:[[SecondViewController alloc]init]];
+    [navigationController2 setTabBarItem:tab2];
+    
+    UITabBarItem *tab3 = [[UITabBarItem alloc]initWithTitle:@"設定" image:nil tag:3];
+    UINavigationController *navigationController3 = [[UINavigationController alloc]initWithRootViewController:[[ThirdViewController alloc]init]];
+    [navigationController3 setTabBarItem:tab3];
+    
+    tabController.viewControllers = [NSArray arrayWithObjects:navigationController1, navigationController2, navigationController3, nil];
+    tabController.tabBar.translucent = NO;
+    
+    self.window.rootViewController = tabController;
+    
     return YES;
 }
 
