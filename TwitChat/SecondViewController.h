@@ -11,19 +11,20 @@
 
 #import "GTMOAuthAuthentication.h"
 #import "GTMOAuthViewControllerTouch.h"
+#import "UIImageView+WebCache.h"
 
 @interface SecondViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
     UITableView *followerTableView;
     NSMutableArray *userImgArray;
-    BOOL imgLoadFlag;
     
     GTMOAuthAuthentication* _auth;
     NSArray* _followerIDs;
     NSArray* _followingIDs;
     NSArray* _friendIDs;
     NSMutableArray* _friends;
+    NSMutableArray* _imageCompleted;
     
-    int _userInfoFetchCounter;
+    int _userInfoFetchCounter;    
 }
 @end

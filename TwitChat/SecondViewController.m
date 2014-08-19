@@ -33,7 +33,7 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     self.title = @"フォロワー";
     
     userImgArray = [NSMutableArray array];
-    imgLoadFlag = FALSE;
+    _userInfoFetchCounter = -1;
     
     followerTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-50) style:UITableViewStyleGrouped];
     followerTableView.delegate = self;
@@ -41,7 +41,6 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     followerTableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:followerTableView];
     [followerTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
-
     
     
     // GTMOAuthAuthenticationインスタンス生成
@@ -81,11 +80,12 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return _friends.count;
+    // ユーザ情報を全て
+    if (_userInfoFetchCounter == 0) return _friends.count;
+    else return 0;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"%d\n", (int)indexPath.row);
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     
     cell.textLabel.numberOfLines = 0;
@@ -93,31 +93,45 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:[UIFont labelFontSize]-3];
     cell.backgroundColor = [UIColor clearColor];
     
-    //取得が完了したらセル画像を適用
-    if (imgLoadFlag) {
-        
-        cell.imageView.image = userImgArray[indexPath.row];
-    }
     //プロフィール画像を円形に
     cell.imageView.layer.masksToBounds = YES;
     cell.imageView.layer.cornerRadius = 22.0f;
 
     
     // 対象インデックスのユーザ情報を取り出す
-    NSString *content;
     NSObject *obj = [_friends objectAtIndex:indexPath.row];
     
     if ([obj isKindOfClass:[NSDictionary class]]) {
         // ユーザ情報
         NSDictionary* user = (NSDictionary*)obj;
-        content = [NSString stringWithFormat:@"%@", user];
+        NSString* content = [NSString stringWithFormat:@"%@ @%@", user[@"name"], user[@"screen_name"]];
         cell.textLabel.text = content;
+        // 画像
+        NSURL *imageURL = [NSURL URLWithString:_friends[indexPath.row][@"profile_image_url"]];
+        UIImage *placeholderImage = [UIImage imageNamed:@"hanayamata"];
+        [cell.imageView sd_setImageWithURL:imageURL placeholderImage:placeholderImage completed:
+        ^(UIImage* image, NSError* error, SDImageCacheType cacheType, NSURL* imageURL){
+            if (![_imageCompleted[indexPath.row] boolValue]) {
+                _imageCompleted[indexPath.row] = [NSNumber numberWithBool:YES];
+                
+                [followerTableView reloadData];
+            }
+        }];
     } else {
         cell.textLabel.text = @"";
     }
-    
     return cell;
 }
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    // テキストサイズでテーブルセルの高さを調整
+//    NSString *content = [NSString stringWithFormat:@"%@", [_friends objectAtIndex:indexPath.row]];
+//    CGSize labelSize = [content boundingRectWithSize:CGSizeMake(227, 1000)
+//                                             options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
+//                                          attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12]} context:nil].size;
+//    
+//    return labelSize.height + 25;
+//}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -130,29 +144,6 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-- (void)fetchImages {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // バックグランドでAPIなどを実行
-        int i = 0;
-        for (NSDictionary* user in _friends) {
-            //セル画像の追加
-            NSLog(@"%d : %@",i,user[@"profile_image_url"]);
-            NSURL * imageURL = [NSURL URLWithString: [user objectForKey:@"profile_image_url"]];
-            NSData * imageData = [NSData dataWithContentsOfURL:imageURL];
-            [userImgArray addObject:[UIImage imageWithData:imageData]];
-            NSLog(@"done");
-            i++;
-        }
-        NSLog(@"finish");
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // メインスレッドで処理をしたい内容、UIを変更など。
-            imgLoadFlag = TRUE;
-            [followerTableView reloadData];
-        });
-    });
-}
-
 
 // 認証処理
 - (void)asyncSignIn
@@ -310,6 +301,7 @@ static const int kMyAlertViewTagAuthenticationError = 1;
 {
     NSString* baseUrlStr = @"https://api.twitter.com/1.1/users/lookup.json?";
     _friends = [[NSMutableArray alloc] init];
+    _imageCompleted = [[NSMutableArray alloc] init];
     _userInfoFetchCounter = 0;
     for (int i=0; i<_friendIDs.count; i+=100) {
         NSMutableArray* tmpArray = [[NSMutableArray alloc] init];
@@ -353,15 +345,17 @@ static const int kMyAlertViewTagAuthenticationError = 1;
                                                                     @"name",
                                                                     @"profile_image_url",
                                                                     @"id"]]];
+        [_imageCompleted addObject:[NSNumber numberWithBool:NO]];
     }
-    
-    // テーブルを更新
-    [followerTableView reloadData];
     
     _userInfoFetchCounter--;
     if (_userInfoFetchCounter == 0) {
-        NSLog(@"%@", _friends);
-        [self fetchImages];
+        // テーブルを更新
+        NSLog(@"user info fetched");
+        [_friends sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [obj1[@"screen_name"] compare:obj2[@"screen_name"]];
+        }];
+        [followerTableView reloadData];
     }
 }
 
