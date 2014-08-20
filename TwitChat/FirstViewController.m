@@ -109,7 +109,8 @@
     //セルの選択を解除（青くなるのを消す）
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    ChatRoomViewController* crvc = [[ChatRoomViewController alloc] initWithGroupID:[groupArray[indexPath.row][@"id"] intValue]];
+    NSNumber* numGroupID = groupArray[indexPath.row][@"id"];
+    ChatRoomViewController* crvc = [[ChatRoomViewController alloc] initWithGroupID:[numGroupID intValue]];
     UINavigationController* nvc = [[UINavigationController alloc] initWithRootViewController:crvc];
     crvc.title = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
     [self presentViewController:nvc animated:YES completion:nil];

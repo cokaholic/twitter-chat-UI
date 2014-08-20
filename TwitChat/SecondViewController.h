@@ -13,6 +13,8 @@
 #import "GTMOAuthViewControllerTouch.h"
 #import "UIImageView+WebCache.h"
 #import "AuthManager.h"
+#import "ServerManager.h"
+#import "ChatRoomViewController.h"
 
 @interface SecondViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {

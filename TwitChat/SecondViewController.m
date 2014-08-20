@@ -117,6 +117,41 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     
     //セルの選択を解除（青くなるのを消す）
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    // グループ作成
+    NSDictionary* friend = _friends[indexPath.row];
+    
+    NSString* my_screen_name = @"sune232002";
+    NSArray* names = @[my_screen_name, friend[@"screen_name"]];
+    NSString* namesStr = [names componentsJoinedByString:@","];
+    
+    NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
+    
+    NSArray* twitterIDs = @[
+                            [ud stringForKey:@"twitter_id"],
+                            friend[@"id"]
+                            ];
+    NSString* twitterIDsStr = [twitterIDs componentsJoinedByString:@","];
+    
+    NSDictionary* param = @{
+                            @"screen_name" : namesStr,
+                            @"name" : namesStr
+                            };
+    
+    [ServerManager serverRequest:@"POST" api:@"groups" param:param completionHandler:^(NSURLResponse *response, NSDictionary *dict) {
+        NSNumber* numStatus = dict[@"status"];
+        int status = [numStatus intValue];
+        
+        if (status == 200) {
+            NSNumber* numGroupID = dict[@"group"][@"id"];
+            int groupID = [numGroupID intValue];
+            ChatRoomViewController* crvc = [[ChatRoomViewController alloc] initWithGroupID:groupID];
+            UINavigationController* nvc = [[UINavigationController alloc] initWithRootViewController:crvc];
+            crvc.title = namesStr;
+            [self presentViewController:nvc animated:YES completion:nil];
+
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning
