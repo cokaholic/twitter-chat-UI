@@ -15,6 +15,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Remote Notification を受信するためにデバイスを登録する
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge
+                                                                           | UIRemoteNotificationTypeSound
+                                                                           | UIRemoteNotificationTypeAlert)];
+        
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
@@ -66,6 +71,21 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+// デバイストークンを受信した際の処理
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    
+    NSString *devToken = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""]
+                                stringByReplacingOccurrencesOfString:@">" withString:@""]
+                                stringByReplacingOccurrencesOfString: @" " withString: @""];
+    NSLog(@"deviceToken: %@", devToken);
+}
+
+// プッシュ通知を受信した際の処理
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    NSLog(@"push recieved : %@", userInfo);
 }
 
 @end
