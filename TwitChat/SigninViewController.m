@@ -123,22 +123,14 @@ static const int kMyAlertViewTagAuthenticationError = 1;
     [ServerManager serverRequest:@"POST"
                              api:@"sessions"
                            param:param
-               completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                   if (connectionError != nil) {
-                       NSLog(@"Error! : %@", connectionError);
-                       return;
-                   }
-                   NSError *error = nil;
-                   NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-                   
+               completionHandler:^(NSURLResponse *response, NSDictionary *dict) {
                    NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
                    NSString* remember = dict[@"user"][@"remember_token"];
                    NSLog(@"remember token = %@", remember);
                    [ud setObject:remember forKey:@"remember"];
                    [AuthManager sharedManager].auth = _auth;
                    [self dismissViewControllerAnimated:YES completion:nil];
-        
-    }];
+               }];
 }
 /*
 #pragma mark - Navigation

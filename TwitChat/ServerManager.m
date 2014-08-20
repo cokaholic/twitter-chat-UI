@@ -25,7 +25,7 @@
 + (void)serverRequest:(NSString*)method
                   api:(NSString *)api
                 param:(NSDictionary *)param
-    completionHandler:(void (^)(NSURLResponse *, NSData *, NSError *))handler {
+    completionHandler:(void (^)(NSURLResponse *, NSDictionary *))handler {
     
     //リクエスト用のパラメータを設定
     NSString *url  = [NSString stringWithFormat:@"http://twitter-chat.herokuapp.com/api/%@.json", api];
@@ -51,7 +51,19 @@
     
     //非同期通信で送信
     [NSURLConnection sendAsynchronousRequest:req queue:[[NSOperationQueue alloc] init]
-                           completionHandler:handler];
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                               if (connectionError != nil) {
+                                   NSLog(@"Error! : %@", connectionError);
+                                   return;
+                               }
+                               NSError *error = nil;
+                               NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                               if (connectionError != nil) {
+                                   NSLog(@"JSON Parse Error! : %@", connectionError);
+                                   return;
+                               }
+                               handler(response, dict);
+                           }];
     
 }
 

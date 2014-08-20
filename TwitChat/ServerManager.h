@@ -14,6 +14,6 @@
 + (void)serverRequest:(NSString*)method
                   api:(NSString *)api
                 param:(NSDictionary *)param
-    completionHandler:(void (^)(NSURLResponse* response, NSData* data, NSError* connectionError))handler;
+    completionHandler:(void (^)(NSURLResponse* response, NSDictionary* dict))handler;
 
 @end
