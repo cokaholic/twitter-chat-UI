@@ -81,6 +81,8 @@
                                 stringByReplacingOccurrencesOfString:@">" withString:@""]
                                 stringByReplacingOccurrencesOfString: @" " withString: @""];
     NSLog(@"deviceToken: %@", devToken);
+    NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:devToken forKey:@"devToken"];
 }
 
 // プッシュ通知を受信した際の処理

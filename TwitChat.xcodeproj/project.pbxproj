@@ -32,6 +32,7 @@
 		38429B5B19A30F190072941B /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 38429B4B19A30F180072941B /* UIView+WebCacheOperation.m */; };
 		388CEEB919A34EA4008B000D /* SigninViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 388CEEB819A34EA4008B000D /* SigninViewController.m */; };
 		388CEEC219A36A34008B000D /* AuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 388CEEC119A36A34008B000D /* AuthManager.m */; };
+		388CEEC519A44748008B000D /* ServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 388CEEC419A44748008B000D /* ServerManager.m */; };
 		9F0256A019A1DD4E00E58955 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F02569F19A1DD4E00E58955 /* Foundation.framework */; };
 		9F0256A219A1DD4E00E58955 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F0256A119A1DD4E00E58955 /* CoreGraphics.framework */; };
 		9F0256A419A1DD4E00E58955 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F0256A319A1DD4E00E58955 /* UIKit.framework */; };
@@ -163,6 +164,8 @@
 		388CEEB819A34EA4008B000D /* SigninViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SigninViewController.m; sourceTree = "<group>"; };
 		388CEEC019A36A34008B000D /* AuthManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthManager.h; sourceTree = "<group>"; };
 		388CEEC119A36A34008B000D /* AuthManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthManager.m; sourceTree = "<group>"; };
+		388CEEC319A44748008B000D /* ServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerManager.h; sourceTree = "<group>"; };
+		388CEEC419A44748008B000D /* ServerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerManager.m; sourceTree = "<group>"; };
 		9F02569C19A1DD4E00E58955 /* TwitChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F02569F19A1DD4E00E58955 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9F0256A119A1DD4E00E58955 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -408,12 +411,14 @@
 				38429B1619A2E76B0072941B /* GTMOAuth */,
 				9F0256CE19A1DD5B00E58955 /* FirstViewController.h */,
 				9F0256CF19A1DD5B00E58955 /* FirstViewController.m */,
-				388CEEB719A34EA4008B000D /* SigninViewController.h */,
-				388CEEB819A34EA4008B000D /* SigninViewController.m */,
 				9F02571519A1E4AD00E58955 /* SecondViewController.h */,
 				9F02571619A1E4AD00E58955 /* SecondViewController.m */,
 				9F02571819A1E4BD00E58955 /* ThirdViewController.h */,
 				9F02571919A1E4BD00E58955 /* ThirdViewController.m */,
+				388CEEB719A34EA4008B000D /* SigninViewController.h */,
+				388CEEB819A34EA4008B000D /* SigninViewController.m */,
+				388CEEC319A44748008B000D /* ServerManager.h */,
+				388CEEC419A44748008B000D /* ServerManager.m */,
 				388CEEC019A36A34008B000D /* AuthManager.h */,
 				388CEEC119A36A34008B000D /* AuthManager.m */,
 				9F6BDA5819A4777600F02CD9 /* ChatRoomViewController.h */,
@@ -759,6 +764,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				388CEEC519A44748008B000D /* ServerManager.m in Sources */,
 				38429B2219A2E7A00072941B /* GTMOAuthSignIn.m in Sources */,
 				9F6BDA4A19A4776100F02CD9 /* JSQMessagesCollectionViewCellIncoming.m in Sources */,
 				9FA6984C19A1FE4800FF9E4C /* JWBlurView.m in Sources */,
@@ -877,6 +883,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREFIX_HEADER = "TwitChat/TwitChat-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -919,6 +926,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREFIX_HEADER = "TwitChat/TwitChat-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
