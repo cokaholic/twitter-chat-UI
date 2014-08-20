@@ -116,38 +116,29 @@ static const int kMyAlertViewTagAuthenticationError = 1;
 
 - (void)getRememberToken
 {
-    //リクエスト用のパラメータを設定
-    NSString *url  = @"http://twitter-chat.herokuapp.com/api/sessions.json";
-    NSString *param = [NSString stringWithFormat:@"access_token=%@&access_token_secret=%@", _auth.accessToken, _auth.tokenSecret];
-    
-    //リクエストを生成
-    NSMutableURLRequest *request;
-    request = [[NSMutableURLRequest alloc] init];
-    [request setHTTPMethod:@"POST"];
-    [request setURL:[NSURL URLWithString:url]];
-    [request setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
-    [request setTimeoutInterval:20];
-    [request setHTTPShouldHandleCookies:FALSE];
-    [request setHTTPBody:[param dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    //同期通信で送信
-    [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init]
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                               if (connectionError != nil) {
-                                   NSLog(@"Error! : %@", connectionError);
-                                   return;
-                               }
-                               NSError *error = nil;
-                               NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-
-                               NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
-                               NSString* remember = dict[@"user"][@"remember_token"];
-                               NSLog(@"remember token = %@", remember);
-                               [ud setObject:remember forKey:@"remember"];
-                               [AuthManager sharedManager].auth = _auth;
-                               [self dismissViewControllerAnimated:YES completion:nil];
-
-                           }];
+    NSDictionary* param = @{
+                            @"access_token": _auth.accessToken,
+                            @"access_token_secret": _auth.tokenSecret
+                            };
+    [ServerManager serverRequest:@"POST"
+                             api:@"sessions"
+                           param:param
+               completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                   if (connectionError != nil) {
+                       NSLog(@"Error! : %@", connectionError);
+                       return;
+                   }
+                   NSError *error = nil;
+                   NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                   
+                   NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
+                   NSString* remember = dict[@"user"][@"remember_token"];
+                   NSLog(@"remember token = %@", remember);
+                   [ud setObject:remember forKey:@"remember"];
+                   [AuthManager sharedManager].auth = _auth;
+                   [self dismissViewControllerAnimated:YES completion:nil];
+        
+    }];
 }
 /*
 #pragma mark - Navigation

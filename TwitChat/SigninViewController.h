@@ -10,6 +10,7 @@
 #import "GTMOAuthAuthentication.h"
 #import "GTMOAuthViewControllerTouch.h"
 #import "AuthManager.h"
+#import "ServerManager.h"
 
 @interface SigninViewController : UIViewController
 {
