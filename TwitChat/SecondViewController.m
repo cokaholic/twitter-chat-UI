@@ -89,13 +89,12 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
         cell.textLabel.text = content;
         // 画像
         NSURL *imageURL = [NSURL URLWithString:_friends[indexPath.row][@"profile_image_url"]];
-        UIImage *placeholderImage = [UIImage imageNamed:@"hanayamata"];
+        UIImage *placeholderImage = [UIImage imageNamed:@"icon_hana"];
         [cell.imageView sd_setImageWithURL:imageURL placeholderImage:placeholderImage completed:
         ^(UIImage* image, NSError* error, SDImageCacheType cacheType, NSURL* imageURL){
             if (![_imageCompleted[indexPath.row] boolValue]) {
                 _imageCompleted[indexPath.row] = [NSNumber numberWithBool:YES];
-                
-                [followerTableView reloadData];
+                [followerTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
             }
         }];
     } else {
@@ -276,7 +275,7 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
         [_friends sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             return [obj1[@"screen_name"] compare:obj2[@"screen_name"]];
         }];
-        [followerTableView reloadData];
+        [followerTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
     }
 }
 

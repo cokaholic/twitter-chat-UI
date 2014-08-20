@@ -20,20 +20,6 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
 - (void)setupTestModel
 {
     /**
-     *  Load some fake messages for demo.
-     *
-     *  You should have a mutable array or orderedSet, or something.
-     */
-    self.messages = [[NSMutableArray alloc] initWithObjects:
-                     [[JSQMessage alloc] initWithText:@"Welcome to JSQMessages: A messaging UI framework for iOS." sender:self.sender date:[NSDate distantPast]],
-                     [[JSQMessage alloc] initWithText:@"It is simple, elegant, and easy to use. There are super sweet default settings, but you can customize like crazy." sender:kJSQDemoAvatarNameWoz date:[NSDate distantPast]],
-                     [[JSQMessage alloc] initWithText:@"It even has data detectors. You can call me tonight. My cell number is 123-456-7890. My website is www.hexedbits.com." sender:self.sender date:[NSDate distantPast]],
-                     [[JSQMessage alloc] initWithText:@"JSQMessagesViewController is nearly an exact replica of the iOS Messages App. And perhaps, better." sender:kJSQDemoAvatarNameJobs date:[NSDate date]],
-                     [[JSQMessage alloc] initWithText:@"It is unit-tested, free, and open-source." sender:kJSQDemoAvatarNameCook date:[NSDate date]],
-                     [[JSQMessage alloc] initWithText:@"Oh, and there's sweet documentation." sender:self.sender date:[NSDate date]],
-                     nil];
-    
-    /**
      *  Create avatar images once.
      *
      *  Be sure to create your avatars one time and reuse them for good performance.
@@ -49,44 +35,31 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
                                                                 diameter:outgoingDiameter];
     
     CGFloat incomingDiameter = self.collectionView.collectionViewLayout.incomingAvatarViewSize.width;
-    
-    UIImage *cookImage = [JSQMessagesAvatarFactory avatarWithImage:[UIImage imageNamed:@"demo_avatar_cook"]
+
+    UIImage *cookImage = [JSQMessagesAvatarFactory avatarWithImage:[UIImage imageNamed:@"icon_hana"]
                                                           diameter:incomingDiameter];
     
-    UIImage *jobsImage = [JSQMessagesAvatarFactory avatarWithImage:[UIImage imageNamed:@"demo_avatar_jobs"]
+    UIImage *jobsImage = [JSQMessagesAvatarFactory avatarWithImage:[UIImage imageNamed:@"icon_naru"]
                                                           diameter:incomingDiameter];
     
-    UIImage *wozImage = [JSQMessagesAvatarFactory avatarWithImage:[UIImage imageNamed:@"demo_avatar_woz"]
+    UIImage *wozImage = [JSQMessagesAvatarFactory avatarWithImage:[UIImage imageNamed:@"icon_yaya"]
                                                          diameter:incomingDiameter];
     self.avatars = @{ self.sender : jsqImage,
                       kJSQDemoAvatarNameCook : cookImage,
                       kJSQDemoAvatarNameJobs : jobsImage,
                       kJSQDemoAvatarNameWoz : wozImage };
-    
-    /**
-     *  Change to add more messages for testing
-     */
-    NSUInteger messagesToAdd = 0;
-    NSArray *copyOfMessages = [self.messages copy];
-    for (NSUInteger i = 0; i < messagesToAdd; i++) {
-        [self.messages addObjectsFromArray:copyOfMessages];
-    }
-    
-    /**
-     *  Change to YES to add a super long message for testing
-     *  You should see "END" twice
-     */
-    BOOL addREALLYLongMessage = NO;
-    if (addREALLYLongMessage) {
-        JSQMessage *reallyLongMessage = [JSQMessage messageWithText:@"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? END Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? END" sender:self.sender];
-        [self.messages addObject:reallyLongMessage];
-    }
 }
 
 
 
 #pragma mark - View lifecycle
 
+- (id)initWithGroupID:(int)groupID {
+    if ([self init]) {
+        _groupID = groupID;
+    }
+    return self;
+}
 /**
  *  Override point for customization.
  *
@@ -102,9 +75,11 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
     
     //self.title = @"JSQMessages";
     
-    //self.sender = @"Jesse Squires";
+    NSUserDefaults* ud = [[NSUserDefaults alloc] init];
+    self.sender = [ud stringForKey:@"twitter_id"];
     
     [self setupTestModel];
+    [self fetchTalk];
     
     /**
      *  Remove camera button since media messages are not yet implemented
@@ -130,6 +105,7 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
                                                                               style:UIBarButtonItemStyleBordered
                                                                              target:self
                                                                              action:@selector(receiveMessagePressed:)];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -158,6 +134,9 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
 
 - (void)receiveMessagePressed:(UIBarButtonItem *)sender
 {
+    
+    [self fetchTalk];
+    return;
     /**
      *  The following is simply to simulate received messages for the demo.
      *  Do not actually do this.
@@ -224,6 +203,14 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
     
     JSQMessage *message = [[JSQMessage alloc] initWithText:text sender:sender date:date];
     [self.messages addObject:message];
+     
+    NSString* api = [NSString stringWithFormat:@"groups/%d/messages", _groupID];
+    NSDictionary* param = @{@"content": message.text};
+    NSLog(@"messege send : %@", message.text);
+    [ServerManager serverRequest:@"POST" api:api param:param completionHandler:^(NSURLResponse *response, NSDictionary *dict) {
+        NSLog(@"message sended : %@", message.text);
+    }];
+    
     
     [self finishSendingMessage];
 }
@@ -459,6 +446,41 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapCellAtIndexPath:(NSIndexPath *)indexPath touchLocation:(CGPoint)touchLocation
 {
     NSLog(@"Tapped cell at %@!", NSStringFromCGPoint(touchLocation));
+}
+
+#pragma mark - Mine
+
+- (void) fetchTalk
+{
+    NSLog(@"fetch talk");
+    NSDictionary* param = @{};
+    NSString* api = [NSString stringWithFormat:@"groups/%d/messages", _groupID];
+    [ServerManager serverRequest:@"GET" api:api param:param completionHandler:^(NSURLResponse *response, NSDictionary *dict) {
+        NSNumber* numStatus = dict[@"status"];
+        int status = [numStatus intValue];
+        if (status == 200) {
+            NSLog(@"fetch talk finished");
+            NSNumber* numCount = dict[@"count"];
+            int count = [numCount intValue];
+            self.messages = [[NSMutableArray alloc] init];
+
+            if (count) {
+                NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+                formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+                NSArray* messages = dict[@"messages"];
+                for (NSDictionary* message in messages) {
+                    NSLog(@"message : %@", message[@"content"]);
+                    NSDate* date = [formatter dateFromString:message[@"created_at"]];
+                    JSQMessage *msg = [[JSQMessage alloc] initWithText:message[@"content"] sender:message[@"user"][@"twitter_id"] date:date];
+                    [self.messages addObject: msg];
+                }
+
+            }
+            self.messages = [NSMutableArray arrayWithArray:[[self.messages reverseObjectEnumerator] allObjects]];
+            [self performSelectorOnMainThread:@selector(finishReceivingMessage) withObject:nil waitUntilDone:NO];
+            // [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+        }
+    }];
 }
 
 @end

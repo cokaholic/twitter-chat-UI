@@ -10,6 +10,9 @@
 
 #import "SigninViewController.h"
 #import "AuthManager.h"
+#import "ChatRoomViewController.h"
+#import "ServerManager.h"
+
 
 @interface FirstViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {

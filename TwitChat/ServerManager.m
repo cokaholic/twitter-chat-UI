@@ -39,15 +39,24 @@
     
     NSString *paramStr = [self getQueryStringByDic:mutableParam];
     
+    NSLog(@"url   : %@", url);
+    NSLog(@"param : %@", paramStr);
+    
     //リクエストを生成
     NSMutableURLRequest *req;
     req = [[NSMutableURLRequest alloc] init];
     [req setHTTPMethod:method];
-    [req setURL:[NSURL URLWithString:url]];
     [req setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
     [req setTimeoutInterval:20];
     [req setHTTPShouldHandleCookies:FALSE];
-    [req setHTTPBody:[paramStr dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    if ([method isEqualToString:@"POST"]) {
+        [req setHTTPBody:[paramStr dataUsingEncoding:NSUTF8StringEncoding]];
+    } else {
+        url = [NSString stringWithFormat:@"%@?%@", url, paramStr];
+    }
+    
+    [req setURL:[NSURL URLWithString:url]];
     
     //非同期通信で送信
     [NSURLConnection sendAsynchronousRequest:req queue:[[NSOperationQueue alloc] init]

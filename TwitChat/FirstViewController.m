@@ -31,9 +31,10 @@
     
     self.title = @"トーク";
 
-    groupArray = [NSMutableArray arrayWithObjects:@"ゆっちー",@"たつみん",@"ティム", nil];
+    groupArray = [[NSMutableArray alloc] init];
     
-    groupTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-50) style:UITableViewStyleGrouped];
+    groupTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-50)
+                                                 style:UITableViewStyleGrouped];
     groupTableView.delegate = self;
     groupTableView.dataSource = self;
     groupTableView.backgroundColor = [UIColor whiteColor];
@@ -57,7 +58,17 @@
         [self presentViewController:navc animated:YES completion:nil];
         
     } else {
+        
+        NSDictionary* param = @{};
+        [ServerManager serverRequest:@"GET" api:@"groups" param:param completionHandler:^(NSURLResponse *response, NSDictionary *dict) {
+            int status = [dict[@"status"] intValue];
+            if (status == 200) {
+                groupArray = dict[@"groups"];
+                [groupTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 
+                NSLog(@"finished");
+            }
+        }];
         
     }
     
@@ -76,15 +87,14 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    
+    NSLog(@"cell number %d\n", (int)groupArray.count);
     return groupArray.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     
-    cell.textLabel.text = groupArray[indexPath.row];
+    cell.textLabel.text = groupArray[indexPath.row][@"name"];
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:[UIFont labelFontSize]-3];
     cell.backgroundColor = [UIColor clearColor];
@@ -98,6 +108,11 @@
     
     //セルの選択を解除（青くなるのを消す）
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    ChatRoomViewController* crvc = [[ChatRoomViewController alloc] initWithGroupID:[groupArray[indexPath.row][@"id"] intValue]];
+    UINavigationController* nvc = [[UINavigationController alloc] initWithRootViewController:crvc];
+    crvc.title = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
+    [self presentViewController:nvc animated:YES completion:nil];
 }
 
 #pragma mark - Private Methods
