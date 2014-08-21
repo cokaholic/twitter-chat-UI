@@ -89,8 +89,9 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
                 NSString* twitter_id = user[@"twitter_id"];
                 [_memberIDs addObject:twitter_id];
             }
+            _groupName = group[@"name"];
+            [self setTitleByGroupName];
             [self fetchUserInfo];
-
         }
     }];
     
@@ -469,6 +470,30 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
 
 #pragma mark - Mine
 
+- (void) setTitleByGroupName
+{
+    if (![_groupName isEqualToString:@""]) {
+        self.title = _groupName;
+    } else {
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        NSString* myID = [ud stringForKey:@"twitter_id"];
+        
+        NSMutableArray* userNames = [NSMutableArray array];
+        for (NSString* userID in _memberIDs) {
+            if ([userID isEqualToString:myID]) continue;
+            NSDictionary* userInfo = _member[userID];
+            NSString* userName;
+            if (userInfo) {
+                userName = userInfo[@"screen_name"];
+            } else {
+                userName = userID;
+            }
+            [userNames addObject:userName];
+        }
+        self.title = [userNames componentsJoinedByString:@","];
+    }
+    
+}
 - (void) fetchTalk
 {
     NSLog(@"fetch talk");
@@ -536,7 +561,7 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
             
             [self.view addSubview:tmpView];
         }
-        
+        [self setTitleByGroupName];
     }];
 }
 

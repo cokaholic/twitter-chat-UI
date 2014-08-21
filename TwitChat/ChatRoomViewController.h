@@ -26,6 +26,7 @@
     NSMutableArray* _memberIDs;
     NSMutableDictionary* _member; // twitter_id : NSDictionary
     NSMutableDictionary* _images;
+    NSString* _groupName;
 }
 
 @property (weak, nonatomic) id<ChatRoomControllerDelegate> delegateModal;

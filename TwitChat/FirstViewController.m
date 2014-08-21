@@ -98,7 +98,6 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSLog(@"cell number %d\n", (int)groupArray.count);
     return groupArray.count;
 }
 
