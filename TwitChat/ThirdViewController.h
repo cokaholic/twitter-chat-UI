@@ -11,12 +11,14 @@
 #import "GTMOAuthViewControllerTouch.h"
 #import "SigninViewController.h"
 #import "AuthManager.h"
+#import "UIImageView+WebCache.h"
 
 @interface ThirdViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
     UIScrollView *backScrollView;
     UIImageView *profileImgView;
-    UILabel *userNameLabel;
+    UILabel *screenNameLabel;
+    UILabel *nameLabel;
     UITableView *settingTableView;
     NSMutableArray *settingArray;
 }

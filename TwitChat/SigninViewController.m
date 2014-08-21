@@ -144,7 +144,8 @@ static const int kMyAlertViewTagAuthenticationError = 1;
         NSDictionary* user = userInfos[0];
         [ud setObject:user[@"screen_name"] forKey:@"screen_name"];
         [ud setObject:user[@"name"] forKey:@"name"];
-
+        [ud setObject:user[@"profile_image_url"] forKey:@"profile_image_url"];
+        
         [self dismissViewControllerAnimated:YES completion:nil];
     }];
 
