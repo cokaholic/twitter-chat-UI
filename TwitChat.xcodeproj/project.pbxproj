@@ -100,6 +100,7 @@
 		9F6BDA5719A4776100F02CD9 /* JSQSystemSoundPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F6BDA2519A4776100F02CD9 /* JSQSystemSoundPlayer.m */; };
 		9F6BDA5A19A4777600F02CD9 /* ChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F6BDA5919A4777600F02CD9 /* ChatRoomViewController.m */; };
 		9F6BDA5C19A4778B00F02CD9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F6BDA5B19A4778B00F02CD9 /* AudioToolbox.framework */; };
+		9F6BDA7919A5EEA300F02CD9 /* ConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F6BDA7819A5EEA300F02CD9 /* ConfirmViewController.m */; };
 		9FA6984519A1EF7000FF9E4C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FA6984419A1EF7000FF9E4C /* QuartzCore.framework */; };
 		9FA6984B19A1FE4800FF9E4C /* UIViewController+ENPopUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FA6984719A1FE4800FF9E4C /* UIViewController+ENPopUp.m */; };
 		9FA6984C19A1FE4800FF9E4C /* JWBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FA6984919A1FE4800FF9E4C /* JWBlurView.m */; };
@@ -269,6 +270,8 @@
 		9F6BDA5819A4777600F02CD9 /* ChatRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatRoomViewController.h; sourceTree = "<group>"; };
 		9F6BDA5919A4777600F02CD9 /* ChatRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatRoomViewController.m; sourceTree = "<group>"; };
 		9F6BDA5B19A4778B00F02CD9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		9F6BDA7719A5EEA300F02CD9 /* ConfirmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmViewController.h; sourceTree = "<group>"; };
+		9F6BDA7819A5EEA300F02CD9 /* ConfirmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmViewController.m; sourceTree = "<group>"; };
 		9FA6984419A1EF7000FF9E4C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9FA6984719A1FE4800FF9E4C /* UIViewController+ENPopUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ENPopUp.m"; sourceTree = "<group>"; };
 		9FA6984819A1FE4800FF9E4C /* UIViewController+ENPopUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ENPopUp.h"; sourceTree = "<group>"; };
@@ -423,6 +426,8 @@
 				388CEEC119A36A34008B000D /* AuthManager.m */,
 				9F6BDA5819A4777600F02CD9 /* ChatRoomViewController.h */,
 				9F6BDA5919A4777600F02CD9 /* ChatRoomViewController.m */,
+				9F6BDA7719A5EEA300F02CD9 /* ConfirmViewController.h */,
+				9F6BDA7819A5EEA300F02CD9 /* ConfirmViewController.m */,
 				9F6BD9CC19A4776100F02CD9 /* JSQMessagesViewController */,
 				9F6BDA2219A4776100F02CD9 /* JSQSystemSoundPlayer */,
 				9F0256B119A1DD4E00E58955 /* Images.xcassets */,
@@ -799,6 +804,7 @@
 				38429B4F19A30F180072941B /* SDWebImageCompat.m in Sources */,
 				9F6BDA3E19A4776100F02CD9 /* JSQMessagesViewController.m in Sources */,
 				38429B1F19A2E7A00072941B /* GTMOAuthViewControllerTouch.m in Sources */,
+				9F6BDA7919A5EEA300F02CD9 /* ConfirmViewController.m in Sources */,
 				38429B5619A30F190072941B /* UIImage+GIF.m in Sources */,
 				38429B5719A30F190072941B /* UIImage+MultiFormat.m in Sources */,
 				9F6BDA3B19A4776100F02CD9 /* UIImage+JSQMessages.m in Sources */,
