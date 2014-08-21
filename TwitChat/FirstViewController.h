@@ -19,6 +19,8 @@
     UITableView *groupTableView;
     NSMutableArray *groupArray;
     GTMOAuthAuthentication* _auth;
+    NSMutableDictionary* _userInfoDic;
+    NSMutableArray* _imageCompleted;
 }
 
 @end

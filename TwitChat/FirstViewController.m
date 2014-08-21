@@ -31,6 +31,9 @@
     
     self.title = @"トーク";
 
+    NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
+    NSLog(@"ud : %@", [ud dictionaryRepresentation]);
+
     groupArray = [[NSMutableArray alloc] init];
     
     groupTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-50)
@@ -63,10 +66,18 @@
         [ServerManager serverRequest:@"GET" api:@"groups" param:param completionHandler:^(NSURLResponse *response, NSDictionary *dict) {
             int status = [dict[@"status"] intValue];
             if (status == 200) {
-                groupArray = dict[@"groups"];
+                groupArray = [NSMutableArray arrayWithArray: dict[@"groups"]];
+                
+                _userInfoDic = [NSMutableDictionary dictionary];
+                    
+                _imageCompleted = [NSMutableArray array];
+                for (int i=0; i<groupArray.count; ++i) {
+                    [_imageCompleted addObject:@NO];
+                }
+                
                 [groupTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-
-                NSLog(@"finished");
+                
+                [self fetchUserInfo];
             }
         }];
         
@@ -94,10 +105,37 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     
-    cell.textLabel.text = groupArray[indexPath.row][@"name"];
+    NSDictionary* group = groupArray[indexPath.row];
+    cell.textLabel.text = group[@"cell_name"];
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:[UIFont labelFontSize]-3];
     cell.backgroundColor = [UIColor clearColor];
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSString* myID = [ud stringForKey:@"twitter_id"];
+    
+    //画像
+    cell.imageView.layer.masksToBounds = YES;
+    cell.imageView.layer.cornerRadius = 22.0f;
+    
+    NSArray* users = group[@"users"];
+    for (NSDictionary* user in users) {
+        NSString* uid = user[@"twitter_id"];
+        if ([uid isEqualToString:myID]) continue; // 自分はスルー
+        NSDictionary* uinfo = _userInfoDic[uid];
+        if (uinfo) {
+            NSURL* imageURL = [NSURL URLWithString:uinfo[@"profile_image_url"]];
+            UIImage *placeholderImage = [UIImage imageNamed:@"icon_hana"];
+            [cell.imageView sd_setImageWithURL:imageURL placeholderImage:placeholderImage completed:
+             ^(UIImage* image, NSError* error, SDImageCacheType cacheType, NSURL* imageURL){
+                 if (![_imageCompleted[indexPath.row] boolValue]) {
+                     _imageCompleted[indexPath.row] = [NSNumber numberWithBool:YES];
+                     [groupTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+                 }
+             }];
+            break;
+        }
+    }
     
     return cell;
 }
@@ -129,6 +167,59 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (void)fetchUserInfo
+{
+    NSMutableSet* IDset = [NSMutableSet set];
+    for (NSDictionary* group in groupArray) {
+        NSArray* users = group[@"users"];
+        for (NSDictionary* user in users) {
+            [IDset addObject:user[@"twitter_id"]];
+        }
+    }
+    NSArray* userIDs = [IDset allObjects];
+    [AuthManager fetchUserInfo:userIDs withHandler:^(NSArray *userInfos) {
+        _userInfoDic = [NSMutableDictionary dictionary];
+        for (NSDictionary* userInfo in userInfos) {
+            _userInfoDic[userInfo[@"id"]] = userInfo;
+        }
+        [self setCellName];
+        [groupTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    }];
+}
+
+- (void)setCellName
+{
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSString* myID = [ud stringForKey:@"twitter_id"];
+    
+    for (int i=0; i<groupArray.count; ++i) {
+        
+        NSMutableDictionary* group = [NSMutableDictionary dictionaryWithDictionary:groupArray[i]];
+        NSString* name = group[@"name"];
+        if (![name isEqualToString:@""]) {
+            group[@"cell_name"] = name;
+        } else {
+            NSMutableArray* userNames = [NSMutableArray array];
+            for (NSDictionary* user in group[@"users"]) {
+                NSString* userID = user[@"twitter_id"];
+                if ([userID isEqualToString:myID]) continue;
+                NSDictionary* userInfo = _userInfoDic[userID];
+                NSString* userName;
+                if (userInfo) {
+                    userName = userInfo[@"screen_name"];
+                } else {
+                    userName = userID;
+                }
+                [userNames addObject:userName];
+            }
+            
+            group[@"cell_name"] = [userNames componentsJoinedByString:@","];
+        }
+        groupArray[i] = [NSDictionary dictionaryWithDictionary:group];
+    }
 }
 
 /*
