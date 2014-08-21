@@ -122,12 +122,14 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     // グループ作成
     NSDictionary* friend = _friends[indexPath.row];
     
-    NSString* my_screen_name = @"sune232002";
+    NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
+    
+    NSString* my_screen_name = [ud stringForKey:@"screen_name"];
+    
     NSArray* names = @[my_screen_name, friend[@"screen_name"]];
     NSString* namesStr = [names componentsJoinedByString:@","];
     
-    NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
-    
+
     NSArray* twitterIDs = @[
                             [ud stringForKey:@"twitter_id"],
                             friend[@"id"]

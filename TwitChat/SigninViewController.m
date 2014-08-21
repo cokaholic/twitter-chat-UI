@@ -133,8 +133,21 @@ static const int kMyAlertViewTagAuthenticationError = 1;
                    [ud setObject:remember forKey:@"remember"];
                    [ud setObject:twitter_id forKey:@"twitter_id"];
                    [AuthManager sharedManager].auth = _auth;
-                   [self dismissViewControllerAnimated:YES completion:nil];
+                   
+                   [self getMyInfo: twitter_id];
                }];
+}
+- (void)getMyInfo:(NSString*)twitter_id
+{
+    [AuthManager fetchUserInfo:@[twitter_id] withHandler:^(NSArray *userInfos) {
+        NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
+        NSDictionary* user = userInfos[0];
+        [ud setObject:user[@"screen_name"] forKey:@"screen_name"];
+        [ud setObject:user[@"name"] forKey:@"name"];
+
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
+
 }
 /*
 #pragma mark - Navigation
