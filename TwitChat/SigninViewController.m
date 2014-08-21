@@ -14,8 +14,6 @@
 
 @implementation SigninViewController
 
-// KeyChain登録サービス名
-static NSString *const kKeychainAppServiceName = @"DMchat";
 
 - (void)viewDidLoad
 {
@@ -31,6 +29,8 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
              initWithSignatureMethod:kGTMOAuthSignatureMethodHMAC_SHA1
              consumerKey:consumerKey
              privateKey:consumerSecret];
+    
+
     
     // 既にOAuth認証済みであればKeyChainから認証情報を読み込む
     BOOL authorized = [GTMOAuthViewControllerTouch

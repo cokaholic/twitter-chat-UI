@@ -93,6 +93,17 @@
     
     //セルの選択を解除（青くなるのを消す）
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if ([settingArray[indexPath.row] isEqualToString:@"ログアウト"]) {
+        [self logout];
+    }
+}
+
+- (void)logout
+{
+    [AuthManager sharedManager].auth = nil;
+    [GTMOAuthViewControllerTouch removeParamsFromKeychainForName:kKeychainAppServiceName];
+    UINavigationController *navc = [[UINavigationController alloc]initWithRootViewController:[[SigninViewController alloc]init]];
+    [self presentViewController:navc animated:YES completion:nil];
 }
 
 

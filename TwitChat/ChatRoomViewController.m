@@ -554,7 +554,7 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
                                   _images[twitter_id] = avator;
                                   
                                   self.avatars = [NSDictionary dictionaryWithDictionary:_images];
-                                  [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:nil];
+                                  [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 
                                   
             }];

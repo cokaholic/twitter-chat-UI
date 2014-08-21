@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import "GTMOAuthViewControllerTouch.h"
+#import "SigninViewController.h"
+#import "AuthManager.h"
 
 @interface ThirdViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
