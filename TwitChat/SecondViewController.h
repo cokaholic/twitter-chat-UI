@@ -16,6 +16,9 @@
 #import "ServerManager.h"
 #import "ChatRoomViewController.h"
 
+#import "UIViewController+ENPopUp.h"  //tatsumi add
+#import "ConfirmViewController.h"    //tatsumi add
+
 @interface SecondViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
     UITableView *followerTableView;

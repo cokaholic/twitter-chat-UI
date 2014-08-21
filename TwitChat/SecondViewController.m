@@ -48,6 +48,17 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     _auth = [AuthManager sharedManager].auth;
 
     [self asyncShowFriends];
+    
+    //tatsumi add>>
+    //addボタン
+    UIBarButtonItem *addBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                           target:self
+                                                                           action:@selector(addTalkGroup)];
+    
+    self.navigationItem.rightBarButtonItem = addBtn;
+    //tatsumi add<<
+    
+    
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -163,6 +174,15 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     // Dispose of any resources that can be recreated.
 }
 
+//tatsumi add>>
+//トークグループ追加
+-(void)addTalkGroup{
+    
+    ConfirmViewController *vc = [[ConfirmViewController alloc]init];
+    vc.view.frame = CGRectMake(0, 0, self.view.bounds.size.width, 340.0f);
+    [self presentPopUpViewController:vc];
+}
+//tatsumi add<<
 
 // デフォルトのタイムライン処理表示
 - (void)asyncShowFriends
