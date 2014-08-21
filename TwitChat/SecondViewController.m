@@ -135,7 +135,7 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     NSString* twitterIDsStr = [twitterIDs componentsJoinedByString:@","];
     
     NSDictionary* param = @{
-                            @"screen_name" : namesStr,
+                            @"user_id" : twitterIDsStr,
                             @"name" : namesStr
                             };
     

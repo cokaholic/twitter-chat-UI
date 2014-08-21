@@ -80,6 +80,7 @@ static AuthManager* manager;
         }
         NSDictionary* params = @{ @"user_id" : [tmpArray componentsJoinedByString:@","] };
         NSString* urlStr = [baseUrlStr stringByAppendingString:[self getQueryStringByDic:params]];
+        NSLog(@"%@", urlStr);
         [self fetchWithURL:urlStr withHandler:^(NSData *data, NSError *error) {
             if (error != nil) {
                 NSLog(@"Fetching users/lookup error: %d", (int)error.code);
@@ -98,11 +99,13 @@ static AuthManager* manager;
             }
             
             // データを保持
-            for (int i=0; i<users.count; ++i) {
-                [infos addObject:[users[i] dictionaryWithValuesForKeys:@[@"screen_name",
-                                                                            @"name",
-                                                                            @"profile_image_url",
-                                                                            @"id"]]];
+            for (NSDictionary* user in users) {
+                NSMutableDictionary* tmp = [[NSMutableDictionary alloc] initWithDictionary:
+                                                [user dictionaryWithValuesForKeys:@[@"screen_name",
+                                                                                    @"name",
+                                                                                    @"profile_image_url"]]];
+                tmp[@"id"] = user[@"id_str"];
+                [infos addObject:tmp];
             }
             counter--;
             

@@ -27,14 +27,12 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
      *  If you are not using avatars, ignore this.
      */
     CGFloat outgoingDiameter = self.collectionView.collectionViewLayout.outgoingAvatarViewSize.width;
-    
-    UIImage *jsqImage = [JSQMessagesAvatarFactory avatarWithUserInitials:@"JSQ"
-                                                         backgroundColor:[UIColor colorWithWhite:0.85f alpha:1.0f]
-                                                               textColor:[UIColor colorWithWhite:0.60f alpha:1.0f]
-                                                                    font:[UIFont systemFontOfSize:14.0f]
-                                                                diameter:outgoingDiameter];
-    
+
     CGFloat incomingDiameter = self.collectionView.collectionViewLayout.incomingAvatarViewSize.width;
+    
+    UIImage *jsqImage = [JSQMessagesAvatarFactory avatarWithImage:[UIImage imageNamed:@"icon_hana"]
+                                                         diameter:outgoingDiameter];
+
 
     UIImage *cookImage = [JSQMessagesAvatarFactory avatarWithImage:[UIImage imageNamed:@"icon_hana"]
                                                           diameter:incomingDiameter];
@@ -57,9 +55,13 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
 - (id)initWithGroupID:(int)groupID {
     if ([self init]) {
         _groupID = groupID;
+        _memberIDs = [NSMutableArray array];
+        _member = [NSMutableDictionary dictionary];
+        _images = [NSMutableDictionary dictionary];
     }
     return self;
 }
+                   
 /**
  *  Override point for customization.
  *
@@ -74,6 +76,23 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
     [super viewDidLoad];
     
     //self.title = @"JSQMessages";
+    NSDictionary* param = @{};
+    NSString* api = [NSString stringWithFormat:@"groups/%d", _groupID];
+    [ServerManager serverRequest:@"GET" api:api param:param completionHandler:^(NSURLResponse *response, NSDictionary *dict) {
+        
+        NSNumber* numStatus = dict[@"status"];
+        int status = [numStatus intValue];
+        if (status == 200) {
+            NSDictionary* group = dict[@"group"];
+            NSArray* users = group[@"users"];
+            for (NSDictionary* user in users) {
+                NSString* twitter_id = user[@"twitter_id"];
+                [_memberIDs addObject:twitter_id];
+            }
+            [self fetchUserInfo];
+
+        }
+    }];
     
     NSUserDefaults* ud = [[NSUserDefaults alloc] init];
     self.sender = [ud stringForKey:@"twitter_id"];
@@ -480,6 +499,44 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
             [self performSelectorOnMainThread:@selector(finishReceivingMessage) withObject:nil waitUntilDone:NO];
             // [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
         }
+    }];
+}
+
+- (void)fetchUserInfo
+{
+    [AuthManager fetchUserInfo:_memberIDs withHandler:^(NSArray *userInfos) {
+        NSLog(@"fetch user info finish");
+        for (NSDictionary* userInfo in userInfos) {
+            _member[userInfo[@"id"]] = userInfo;
+            NSString* imageURL = userInfo[@"profile_image_url"];
+            
+            NSLog(@"%@", imageURL);
+            
+            UIImageView* tmpView = [[UIImageView alloc] init];
+            
+            [tmpView sd_setImageWithURL:[NSURL URLWithString:imageURL]
+                              completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                  NSString* twitter_id = userInfo[@"id"];
+                                  CGFloat diameter;
+                                  if (self.sender == twitter_id) {
+                                      diameter = self.collectionView.collectionViewLayout.outgoingAvatarViewSize.width;
+                                  } else {
+                                      diameter = self.collectionView.collectionViewLayout.incomingAvatarViewSize.width;
+                                  }
+                                  UIImage* avator = [JSQMessagesAvatarFactory avatarWithImage:image
+                                                                                     diameter:diameter];
+                                  
+                                  _images[twitter_id] = avator;
+                                  
+                                  self.avatars = [NSDictionary dictionaryWithDictionary:_images];
+                                  [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:nil];
+
+                                  
+            }];
+            
+            [self.view addSubview:tmpView];
+        }
+        
     }];
 }
 

@@ -10,7 +10,7 @@
 //#import "UIBubbleTableViewDataSource.h"
 #import "JSQMessagesViewController/JSQMessages.h"    // import all headers
 #import "ServerManager.h"
-
+#import "UIImageView+WebCache.h"
 @class ChatRoomViewController;
 
 
@@ -23,7 +23,9 @@
 @interface ChatRoomViewController : JSQMessagesViewController
 {
     int _groupID;
-    
+    NSMutableArray* _memberIDs;
+    NSMutableDictionary* _member; // twitter_id : NSDictionary
+    NSMutableDictionary* _images;
 }
 
 @property (weak, nonatomic) id<ChatRoomControllerDelegate> delegateModal;
