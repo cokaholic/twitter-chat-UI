@@ -45,11 +45,16 @@
     [groupTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
     
     //Backボタン
-    UIBarButtonItem *addBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                           target:self
-                                                                           action:@selector(addTalkGroup)];
+//    UIBarButtonItem *addBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+//                                                                           target:self
+//                                                                           action:@selector(addTalkGroup)];
+    UIBarButtonItem *reloadButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                                                                  target:self
+                                                                                  action:@selector(reloadGroupsData)];
     
-    self.navigationItem.rightBarButtonItem = addBtn;
+//    self.navigationItem.rightBarButtonItem = addBtn;
+    self.navigationItem.leftBarButtonItem = reloadButton;
+    _needReloadGroupData = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -60,29 +65,34 @@
         UINavigationController *navc = [[UINavigationController alloc]initWithRootViewController:[[SigninViewController alloc]init]];
         [self presentViewController:navc animated:YES completion:nil];
         
-    } else {
-        
-        NSDictionary* param = @{};
-        [ServerManager serverRequest:@"GET" api:@"groups" param:param completionHandler:^(NSURLResponse *response, NSDictionary *dict) {
-            int status = [dict[@"status"] intValue];
-            if (status == 200) {
-                groupArray = [NSMutableArray arrayWithArray: dict[@"groups"]];
-                
-                _userInfoDic = [NSMutableDictionary dictionary];
-                    
-                _imageCompleted = [NSMutableArray array];
-                for (int i=0; i<groupArray.count; ++i) {
-                    [_imageCompleted addObject:@NO];
-                }
-                
-                [groupTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-                
-                [self fetchUserInfo];
-            }
-        }];
-        
+    } else if (_needReloadGroupData) {
+        _needReloadGroupData = NO;
+        [self reloadGroupsData];
     }
     
+}
+
+- (void)reloadGroupsData
+{
+    NSDictionary* param = @{};
+    [ServerManager serverRequest:@"GET" api:@"groups" param:param completionHandler:^(NSURLResponse *response, NSDictionary *dict) {
+        int status = [dict[@"status"] intValue];
+        if (status == 200) {
+            groupArray = [NSMutableArray arrayWithArray: dict[@"groups"]];
+            
+            _userInfoDic = [NSMutableDictionary dictionary];
+            
+            _imageCompleted = [NSMutableArray array];
+            for (int i=0; i<groupArray.count; ++i) {
+                [_imageCompleted addObject:@NO];
+            }
+            
+            [self setCellName];
+            [groupTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+            
+            [self fetchUserInfo];
+        }
+    }];
 }
 
 #pragma mark - UITableView DataSource
@@ -184,7 +194,7 @@
         for (NSDictionary* userInfo in userInfos) {
             _userInfoDic[userInfo[@"id"]] = userInfo;
         }
-        [self setCellName];
+        //[self setCellName];
         [groupTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
     }];
 }

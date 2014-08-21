@@ -21,6 +21,7 @@
     GTMOAuthAuthentication* _auth;
     NSMutableDictionary* _userInfoDic;
     NSMutableArray* _imageCompleted;
+    BOOL _needReloadGroupData;
 }
 
 @end
