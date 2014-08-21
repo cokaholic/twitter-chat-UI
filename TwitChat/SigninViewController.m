@@ -125,9 +125,13 @@ static const int kMyAlertViewTagAuthenticationError = 1;
                            param:param
                completionHandler:^(NSURLResponse *response, NSDictionary *dict) {
                    NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
-                   NSString* remember = dict[@"user"][@"remember_token"];
+                   NSDictionary* user = dict[@"user"];
+                   NSString* remember = user[@"remember_token"];
+                   NSString* twitter_id = user[@"twitter_id"];
                    NSLog(@"remember token = %@", remember);
+                   NSLog(@"twitter id = %@", twitter_id);
                    [ud setObject:remember forKey:@"remember"];
+                   [ud setObject:twitter_id forKey:@"twitter_id"];
                    [AuthManager sharedManager].auth = _auth;
                    [self dismissViewControllerAnimated:YES completion:nil];
                }];

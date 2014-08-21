@@ -16,4 +16,7 @@
 
 + (AuthManager*)sharedManager;
 
++ (void)fetchUserInfo:(NSArray*)userIDs withHandler:(void(^)(NSArray* userInfos))handler;
++ (void)fetchFollowIDs:(NSString*)method withHandler:(void(^)(NSArray* twitter_ids))handler;
+
 @end

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 //#import "UIBubbleTableViewDataSource.h"
 #import "JSQMessagesViewController/JSQMessages.h"    // import all headers
+#import "ServerManager.h"
 
 @class ChatRoomViewController;
 
@@ -20,6 +21,10 @@
 @end
 
 @interface ChatRoomViewController : JSQMessagesViewController
+{
+    int _groupID;
+    
+}
 
 @property (weak, nonatomic) id<ChatRoomControllerDelegate> delegateModal;
 
@@ -34,5 +39,8 @@
 - (void)closePressed:(UIBarButtonItem *)sender;
 
 - (void)setupTestModel;
+
+- (id)initWithGroupID:(int)groupID;
+
 
 @end

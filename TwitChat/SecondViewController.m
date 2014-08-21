@@ -23,6 +23,7 @@
     return self;
 }
 
+
 // KeyChain登録サービス名
 static NSString *const kKeychainAppServiceName = @"DMchat";
 
@@ -89,13 +90,12 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
         cell.textLabel.text = content;
         // 画像
         NSURL *imageURL = [NSURL URLWithString:_friends[indexPath.row][@"profile_image_url"]];
-        UIImage *placeholderImage = [UIImage imageNamed:@"hanayamata"];
+        UIImage *placeholderImage = [UIImage imageNamed:@"icon_hana"];
         [cell.imageView sd_setImageWithURL:imageURL placeholderImage:placeholderImage completed:
         ^(UIImage* image, NSError* error, SDImageCacheType cacheType, NSURL* imageURL){
             if (![_imageCompleted[indexPath.row] boolValue]) {
                 _imageCompleted[indexPath.row] = [NSNumber numberWithBool:YES];
-                
-                [followerTableView reloadData];
+                [followerTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
             }
         }];
     } else {
@@ -118,6 +118,41 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     
     //セルの選択を解除（青くなるのを消す）
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    // グループ作成
+    NSDictionary* friend = _friends[indexPath.row];
+    
+    NSString* my_screen_name = @"sune232002";
+    NSArray* names = @[my_screen_name, friend[@"screen_name"]];
+    NSString* namesStr = [names componentsJoinedByString:@","];
+    
+    NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
+    
+    NSArray* twitterIDs = @[
+                            [ud stringForKey:@"twitter_id"],
+                            friend[@"id"]
+                            ];
+    NSString* twitterIDsStr = [twitterIDs componentsJoinedByString:@","];
+    
+    NSDictionary* param = @{
+                            @"screen_name" : namesStr,
+                            @"name" : namesStr
+                            };
+    
+    [ServerManager serverRequest:@"POST" api:@"groups" param:param completionHandler:^(NSURLResponse *response, NSDictionary *dict) {
+        NSNumber* numStatus = dict[@"status"];
+        int status = [numStatus intValue];
+        
+        if (status == 200) {
+            NSNumber* numGroupID = dict[@"group"][@"id"];
+            int groupID = [numGroupID intValue];
+            ChatRoomViewController* crvc = [[ChatRoomViewController alloc] initWithGroupID:groupID];
+            UINavigationController* nvc = [[UINavigationController alloc] initWithRootViewController:crvc];
+            crvc.title = namesStr;
+            [self presentViewController:nvc animated:YES completion:nil];
+
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -130,83 +165,30 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
 // デフォルトのタイムライン処理表示
 - (void)asyncShowFriends
 {
-    [self fetchFollowIDs:@"friends"];
-    [self fetchFollowIDs:@"followers"];
+    __block int counter = 2;
+    
+    [AuthManager fetchFollowIDs:@"friends" withHandler:^(NSArray *twitter_ids) {
+        _followingIDs = twitter_ids;
+        counter--;
+        if (counter == 0) {
+            [self finishFetchFollowIDs];
+        }
+    }];
+    [AuthManager fetchFollowIDs:@"followers" withHandler:^(NSArray *twitter_ids) {
+        _followerIDs = twitter_ids;
+        counter--;
+        if (counter == 0) {
+            [self finishFetchFollowIDs];
+        }
+    }];
 }
 
-// クエリのエンコード
--(NSString*)getQueryStringByDic:(NSDictionary*)dic
+- (void)finishFetchFollowIDs
 {
-    NSArray*keys = [dic allKeys];
-    NSMutableArray*tmp=[NSMutableArray array];
-    for (NSString*key in keys) {
-        [tmp addObject:[NSString stringWithFormat:@"%@=%@",key,dic[key]]];
-    }
-    return [tmp componentsJoinedByString:@"&"];
-}
-
-// URLで取得
-- (void)fetchWithURL:(NSString*)urlStr didFinishSelector:(SEL)selector userData:(id)data {
-    // 要求を準備
-    NSURL *url = [NSURL URLWithString:urlStr];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setHTTPMethod:@"GET"];
-    
-    // 要求に署名情報を付加
-    [_auth authorizeRequest:request];
-    
-    // 非同期通信による取得開始
-    GTMHTTPFetcher *fetcher = [GTMHTTPFetcher fetcherWithRequest:request];
-    [fetcher beginFetchWithDelegate:self
-                  didFinishSelector:selector];
-    fetcher.userData = data;
-}
-
-// フォロワー/フォロワーID 取得
-- (void)fetchFollowIDs:(NSString*)method
-{
-    NSString* baseUrlStr = [NSString stringWithFormat:@"https://api.twitter.com/1.1/%@/ids.json?", method];
-    NSDictionary* params = @{ @"count" : @"5000" };
-    NSString* urlStr = [baseUrlStr stringByAppendingString:[self getQueryStringByDic:params]];
-    [self fetchWithURL:urlStr
-     didFinishSelector:@selector(followIDsFetcher:finishedWithData:error:)
-              userData:method];
-}
-
-// フォロー/フォロワーID 取得応答時
-- (void)followIDsFetcher:(GTMHTTPFetcher *)fetcher
-        finishedWithData:(NSData *)data
-                   error:(NSError *)error
-{
-    if (error != nil) {
-        NSLog(@"Fetching %@/ids error: %d", fetcher.userData, (int)error.code);
-        return;
-    }
-    // JSONデータをパース
-    NSError *jsonError = nil;
-    NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data
-                                                         options:0
-                                                           error:&jsonError];
-    
-    // JSONデータのパースエラー
-    if (dict == nil) {
-        NSLog(@"JSON Parser error: %d", (int)jsonError.code);
-        return;
-    }
-    
-    // データを保持
-    if ([fetcher.userData isEqualToString:@"friends"]) {
-        _followingIDs = [dict objectForKey:@"ids"];
-    } else {
-        _followerIDs = [dict objectForKey:@"ids"];
-    }
-    
-    if (_followerIDs != nil && _followingIDs != nil) {
-        // 相互フォロー取得
-        [self getFriend];
-        // ユーザ情報取得
-        [self fetchUserInfo];
-    }
+    // 相互フォロー取得
+    [self getFriend];
+    // ユーザ情報取得
+    [self fetchUserInfo];
 }
 
 - (void)getFriend
@@ -217,67 +199,24 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     _friendIDs = [followingSet allObjects];
 }
 
-// ユーザ情報取得
 - (void)fetchUserInfo
 {
-    NSString* baseUrlStr = @"https://api.twitter.com/1.1/users/lookup.json?";
-    _friends = [[NSMutableArray alloc] init];
-    _imageCompleted = [[NSMutableArray alloc] init];
-    _userInfoFetchCounter = 0;
-    for (int i=0; i<_friendIDs.count; i+=100) {
-        NSMutableArray* tmpArray = [[NSMutableArray alloc] init];
-        for (int j=i; j<MIN(i+100, _friendIDs.count); ++j) {
-            [tmpArray addObject:[_friendIDs objectAtIndex:j]];
-        }
-        NSDictionary* params = @{ @"user_id" : [tmpArray componentsJoinedByString:@","] };
-        NSString* urlStr = [baseUrlStr stringByAppendingString:[self getQueryStringByDic:params]];
-        [self fetchWithURL:urlStr
-         didFinishSelector:@selector(userInfoFetcher:finishedWithData:error:)
-                  userData:[NSNumber numberWithInt:i]];
-        _userInfoFetchCounter++;
-    }
-}
-
-
-// ユーザ情報 取得応答時
-- (void)userInfoFetcher:(GTMHTTPFetcher *)fetcher
-       finishedWithData:(NSData *)data
-                  error:(NSError *)error
-{
-    if (error != nil) {
-        NSLog(@"Fetching users/lookup error: %d", (int)error.code);
-        return;
-    }
-    
-    // JSONデータをパース
-    NSError *jsonError = nil;
-    NSArray* users = [NSJSONSerialization JSONObjectWithData:data
-                                                     options:0
-                                                       error:&jsonError];
-    // JSONデータのパースエラー
-    if (users == nil) {
-        NSLog(@"JSON Parser error: %d", (int)jsonError.code);
-        return;
-    }
-    
-    // データを保持
-    for (int i=0; i<users.count; ++i) {
-        [_friends addObject:[users[i] dictionaryWithValuesForKeys:@[@"screen_name",
-                                                                    @"name",
-                                                                    @"profile_image_url",
-                                                                    @"id"]]];
-        [_imageCompleted addObject:[NSNumber numberWithBool:NO]];
-    }
-    
-    _userInfoFetchCounter--;
-    if (_userInfoFetchCounter == 0) {
-        // テーブルを更新
-        NSLog(@"user info fetched");
+    [AuthManager fetchUserInfo:_friendIDs withHandler:^(NSArray *userInfos) {
+        NSLog(@"finish!!!!!!");
+        _friends = [NSMutableArray arrayWithArray:userInfos];
         [_friends sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             return [obj1[@"screen_name"] compare:obj2[@"screen_name"]];
         }];
-        [followerTableView reloadData];
-    }
+        _userInfoFetchCounter = 0;
+        
+        _imageCompleted = [NSMutableArray array];
+        
+        for (int i=0; i<_friends.count; ++i) {
+            [_imageCompleted addObject:@NO];
+        }
+        
+        [followerTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    }];
 }
 
 /*
