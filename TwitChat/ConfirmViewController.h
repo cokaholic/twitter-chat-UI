@@ -13,6 +13,7 @@
     UITableView *followerTableView;
     UIButton *goTalkButton;
     UIButton *cancelButton;
+    
 }
 
 @property(nonatomic,retain)NSArray *userNames;

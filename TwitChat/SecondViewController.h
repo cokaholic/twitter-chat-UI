@@ -31,6 +31,9 @@
     NSMutableArray* _friends;
     NSMutableArray* _imageCompleted;
     
-    int _userInfoFetchCounter;    
+    NSMutableSet *cellNumberSet;  //added
+    NSInteger *tapped;  //added
+    
+    int _userInfoFetchCounter;
 }
 @end
