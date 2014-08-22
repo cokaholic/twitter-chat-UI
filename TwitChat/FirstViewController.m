@@ -77,14 +77,11 @@
         if (status == 200) {
             groupArray = [NSMutableArray arrayWithArray: dict[@"groups"]];
             
-            _userInfoDic = [NSMutableDictionary dictionary];
-            
             _imageCompleted = [NSMutableArray array];
             for (int i=0; i<groupArray.count; ++i) {
                 [_imageCompleted addObject:@NO];
             }
             
-            [self setCellName];
             [groupTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
             
             [self fetchUserInfo];
@@ -191,7 +188,7 @@
         for (NSDictionary* userInfo in userInfos) {
             _userInfoDic[userInfo[@"id"]] = userInfo;
         }
-        //[self setCellName];
+        [self setCellName];
         [groupTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
     }];
 }

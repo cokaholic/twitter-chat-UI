@@ -31,7 +31,7 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
 {
     [super viewDidLoad];
     
-    self.title = @"フォロワー";
+    self.title = @"フレンド";
     
     userImgArray = [NSMutableArray array];
     _userInfoFetchCounter = -1;
@@ -53,16 +53,34 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     
     //tatsumi add>>
     //addボタン
-    UIBarButtonItem *addBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                           target:self
-                                                                           action:@selector(addTalkGroup)];
+    addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                             target:self
+                                                             action:@selector(addTalkGroup)];
     
-    self.navigationItem.rightBarButtonItem = addBtn;
+    self.navigationItem.rightBarButtonItem = addButton;
+    
+    addButton.enabled = NO;
+    
     //tatsumi add<<
+    
+    clearButton = [[UIBarButtonItem alloc]initWithTitle:@"Clear" style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(clearGroup)];
+    
+    self.navigationItem.leftBarButtonItem = clearButton;
+    clearButton.enabled = NO;
     
     
 }
 
+- (void)clearGroup
+{
+    addButton.enabled = NO;
+    clearButton.enabled = NO;
+    
+    [cellNumberSet removeAllObjects];
+    [followerTableView reloadData];
+}
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     
     return 1;
@@ -70,7 +88,8 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     
-    return @"Followers";
+    return nil;
+//    return @"Followers";
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -146,6 +165,14 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
         [cellNumberSet addObject:rowNum];
     }
     
+    if (cellNumberSet.count > 0) {
+        addButton.enabled = YES;
+        clearButton.enabled = YES;
+    } else {
+        addButton.enabled = NO;
+        clearButton.enabled = NO;
+    }
+    
     [followerTableView reloadData];
     
     /*
@@ -203,11 +230,69 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     //選択数が１以上なら移動
     if (cellNumberSet.count!=0) {
         ConfirmViewController *vc = [[ConfirmViewController alloc]init];
+        
+        NSMutableArray* userIDs = [NSMutableArray array];
+        NSMutableArray* userNames = [NSMutableArray array];
+        NSMutableArray* userImages = [NSMutableArray array];
+        
+        NSArray* sorted = [[cellNumberSet allObjects] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [obj1 compare:obj2];
+        }];
+        for (NSNumber* rowNum in sorted) {
+            int row = [rowNum intValue];
+            NSDictionary* friend = _friends[row];
+            UITableViewCell* cell = [followerTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
+            [userImages addObject: cell.imageView.image];
+            [userIDs addObject:friend[@"id"]];
+            [userNames addObject:cell.textLabel.text];
+        }
+        
+        _confirmUserIDs = [NSArray arrayWithArray:userIDs];
+        vc.userIDs = [NSArray arrayWithArray:userIDs];
+        vc.userNames = [NSArray arrayWithArray:userNames];
+        vc.userImages = [NSArray arrayWithArray:userImages];
+        
         vc.view.frame = CGRectMake(0, 0, self.view.bounds.size.width, 340.0f);
+        vc.delegate = self;
         [self presentPopUpViewController:vc];
     }
 }
 //tatsumi add<<
+
+-(void)confirmCancelTalk
+{
+    NSLog(@"cancel!");
+    [self dismissPopUpViewControllerWithcompletion:nil];
+}
+
+-(void)confirmGoTalk
+{
+    NSLog(@"go talk!");
+    NSString* twitterIDsStr = [_confirmUserIDs componentsJoinedByString:@","];
+    
+    NSDictionary* param = @{
+                            @"user_id" : twitterIDsStr,
+                            @"name" : @""
+                            };
+    
+    [ServerManager serverRequest:@"POST" api:@"groups" param:param completionHandler:^(NSURLResponse *response, NSDictionary *dict) {
+        NSNumber* numStatus = dict[@"status"];
+        int status = [numStatus intValue];
+        
+        if (status == 200) {
+            NSNumber* numGroupID = dict[@"group"][@"id"];
+            int groupID = [numGroupID intValue];
+            ChatRoomViewController* crvc = [[ChatRoomViewController alloc] initWithGroupID:groupID];
+            UINavigationController* nvc = [[UINavigationController alloc] initWithRootViewController:crvc];
+            
+            [self dismissPopUpViewControllerWithcompletion:nil];
+            [self presentViewController:nvc animated:YES completion:nil];
+            
+            [self clearGroup];
+        }
+    }];
+}
+
 
 // デフォルトのタイムライン処理表示
 - (void)asyncShowFriends

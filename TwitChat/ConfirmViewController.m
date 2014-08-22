@@ -27,20 +27,6 @@
 {
     [super viewDidLoad];
     
-    self.userNames = [NSArray array];
-    self.userImages = [NSMutableArray array];
-    
-    //トークメンバー配列
-    self.userNames = @[@"ゆっちー",@"ティム",@"たつみん"];
-    
-    //トークメンバー画像配列
-    NSArray *imgNames = @[@"icon_hana",@"icon_naru",@"icon_yaya"];
-    for (NSString *imgName in imgNames) {
-        
-        //NSMutableArrayです
-        [self.userImages addObject:[UIImage imageNamed:imgName]];
-    }
-    
     followerTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 290.0f) style:UITableViewStyleGrouped];
     followerTableView.delegate = self;
     followerTableView.dataSource = self;
@@ -53,6 +39,7 @@
     [goTalkButton setTitle:@"Talk" forState:UIControlStateNormal];
     goTalkButton.tintColor = [UIColor blueColor];
     goTalkButton.backgroundColor = [UIColor whiteColor];
+    [goTalkButton addTarget:self action:@selector(goTalk) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:goTalkButton];
     
     cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -60,7 +47,19 @@
     [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     cancelButton.tintColor = [UIColor redColor];
     cancelButton.backgroundColor = [UIColor whiteColor];
+    [cancelButton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancelButton];
+}
+
+-(void)goTalk
+{
+    [self.delegate confirmGoTalk];
+}
+
+-(void)cancel
+{
+    [self.delegate confirmCancelTalk];
+
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

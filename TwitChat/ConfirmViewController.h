@@ -7,6 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ChatRoomViewController.h"
+
+@protocol ConfirmProtocol <NSObject>
+
+- (void)confirmGoTalk;
+- (void)confirmCancelTalk;
+
+@end
 
 @interface ConfirmViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
@@ -16,7 +24,9 @@
     
 }
 
+@property(nonatomic,retain)id<ConfirmProtocol> delegate;
+@property(nonatomic,retain)NSArray *userIDs;
 @property(nonatomic,retain)NSArray *userNames;
-@property(nonatomic,retain)NSMutableArray *userImages;
+@property(nonatomic,retain)NSArray *userImages;
 
 @end

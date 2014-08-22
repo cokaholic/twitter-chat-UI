@@ -19,7 +19,7 @@
 #import "UIViewController+ENPopUp.h"  //tatsumi add
 #import "ConfirmViewController.h"    //tatsumi add
 
-@interface SecondViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface SecondViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, ConfirmProtocol>
 {
     UITableView *followerTableView;
     NSMutableArray *userImgArray;
@@ -32,8 +32,11 @@
     NSMutableArray* _imageCompleted;
     
     NSMutableSet *cellNumberSet;  //added
+    NSArray* _confirmUserIDs;
     NSInteger *tapped;  //added
     
+    UIBarButtonItem* addButton;
+    UIBarButtonItem* clearButton;
     int _userInfoFetchCounter;
 }
 @end
