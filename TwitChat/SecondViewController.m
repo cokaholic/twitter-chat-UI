@@ -36,6 +36,8 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     userImgArray = [NSMutableArray array];
     _userInfoFetchCounter = -1;
     
+    cellNumberSet = [NSMutableArray array];   //added
+    
     followerTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-50) style:UITableViewStyleGrouped];
     followerTableView.delegate = self;
     followerTableView.dataSource = self;
@@ -90,7 +92,14 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     cell.imageView.layer.masksToBounds = YES;
     cell.imageView.layer.cornerRadius = 22.0f;
 
-    
+    //added
+    NSNumber* rowNum = [NSNumber numberWithInteger:indexPath.row];
+    if ([cellNumberSet containsObject:rowNum]) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+
     // 対象インデックスのユーザ情報を取り出す
     NSObject *obj = [_friends objectAtIndex:indexPath.row];
     
@@ -129,7 +138,17 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     
     //セルの選択を解除（青くなるのを消す）
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    NSNumber* rowNum = [NSNumber numberWithInteger:indexPath.row];
+    if ([cellNumberSet containsObject:rowNum]) {
+        [cellNumberSet removeObject:rowNum];
+    } else {
+        [cellNumberSet addObject:rowNum];
+    }
     
+    [followerTableView reloadData];
+    
+    /*
     // グループ作成
     NSDictionary* friend = _friends[indexPath.row];
     
@@ -166,6 +185,7 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
 
         }
     }];
+    */
 }
 
 - (void)didReceiveMemoryWarning
@@ -178,9 +198,14 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
 //トークグループ追加
 -(void)addTalkGroup{
     
-    ConfirmViewController *vc = [[ConfirmViewController alloc]init];
-    vc.view.frame = CGRectMake(0, 0, self.view.bounds.size.width, 340.0f);
-    [self presentPopUpViewController:vc];
+    NSLog(@"%@",cellNumberSet);
+    
+    //選択数が１以上なら移動
+    if (cellNumberSet.count!=0) {
+        ConfirmViewController *vc = [[ConfirmViewController alloc]init];
+        vc.view.frame = CGRectMake(0, 0, self.view.bounds.size.width, 340.0f);
+        [self presentPopUpViewController:vc];
+    }
 }
 //tatsumi add<<
 
