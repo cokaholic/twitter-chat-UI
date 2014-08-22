@@ -15,41 +15,6 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
 
 @implementation ChatRoomViewController
 
-#pragma mark - Demo setup
-
-- (void)setupTestModel
-{
-    /**
-     *  Create avatar images once.
-     *
-     *  Be sure to create your avatars one time and reuse them for good performance.
-     *
-     *  If you are not using avatars, ignore this.
-     */
-    CGFloat outgoingDiameter = self.collectionView.collectionViewLayout.outgoingAvatarViewSize.width;
-
-    CGFloat incomingDiameter = self.collectionView.collectionViewLayout.incomingAvatarViewSize.width;
-    
-    UIImage *jsqImage = [JSQMessagesAvatarFactory avatarWithImage:[UIImage imageNamed:@"icon_hana"]
-                                                         diameter:outgoingDiameter];
-
-
-    UIImage *cookImage = [JSQMessagesAvatarFactory avatarWithImage:[UIImage imageNamed:@"icon_hana"]
-                                                          diameter:incomingDiameter];
-    
-    UIImage *jobsImage = [JSQMessagesAvatarFactory avatarWithImage:[UIImage imageNamed:@"icon_naru"]
-                                                          diameter:incomingDiameter];
-    
-    UIImage *wozImage = [JSQMessagesAvatarFactory avatarWithImage:[UIImage imageNamed:@"icon_yaya"]
-                                                         diameter:incomingDiameter];
-    self.avatars = @{ self.sender : jsqImage,
-                      kJSQDemoAvatarNameCook : cookImage,
-                      kJSQDemoAvatarNameJobs : jobsImage,
-                      kJSQDemoAvatarNameWoz : wozImage };
-}
-
-
-
 #pragma mark - View lifecycle
 
 - (id)initWithGroupID:(int)groupID {
@@ -98,7 +63,6 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
     NSUserDefaults* ud = [[NSUserDefaults alloc] init];
     self.sender = [ud stringForKey:@"twitter_id"];
     
-    [self setupTestModel];
     [self fetchTalk];
     
     /**
@@ -341,7 +305,12 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
     /**
      *  Don't specify attributes to use the defaults.
      */
-    return [[NSAttributedString alloc] initWithString:message.sender];
+    if (_member[message.sender]) {
+        NSString* name = [NSString stringWithFormat:@"@%@", _member[message.sender][@"screen_name"]];
+        return [[NSAttributedString alloc] initWithString: name];
+    } else {
+        return nil;
+    }
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
@@ -541,17 +510,19 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
             
             [tmpView sd_setImageWithURL:[NSURL URLWithString:imageURL]
                               completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                                  NSString* twitter_id = userInfo[@"id"];
+                                  
+                                  NSString* name = userInfo[@"id"];
                                   CGFloat diameter;
-                                  if (self.sender == twitter_id) {
+                                  if (self.sender == name) {
                                       diameter = self.collectionView.collectionViewLayout.outgoingAvatarViewSize.width;
                                   } else {
                                       diameter = self.collectionView.collectionViewLayout.incomingAvatarViewSize.width;
                                   }
                                   UIImage* avator = [JSQMessagesAvatarFactory avatarWithImage:image
                                                                                      diameter:diameter];
-                                  
-                                  _images[twitter_id] = avator;
+
+
+                                  _images[name] = avator;
                                   
                                   self.avatars = [NSDictionary dictionaryWithDictionary:_images];
                                   [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
