@@ -15,6 +15,11 @@ static NSString * const kJSQDemoAvatarNameWoz = @"Steve Wozniak";
 
 @implementation ChatRoomViewController
 
+- (void)setupTestModel
+{
+    
+}
+
 #pragma mark - View lifecycle
 
 - (id)initWithGroupID:(int)groupID {

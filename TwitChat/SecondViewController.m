@@ -36,7 +36,7 @@ static NSString *const kKeychainAppServiceName = @"DMchat";
     userImgArray = [NSMutableArray array];
     _userInfoFetchCounter = -1;
     
-    cellNumberSet = [NSMutableArray array];   //added
+    cellNumberSet = [NSMutableSet set];
     
     followerTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-50) style:UITableViewStyleGrouped];
     followerTableView.delegate = self;
