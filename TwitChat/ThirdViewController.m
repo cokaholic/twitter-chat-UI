@@ -32,39 +32,62 @@
     settingArray = [NSMutableArray arrayWithObjects:@"ログアウト",@"アプリ内サウンド",@"Twitter",@"ヘルプ", nil];
     
     backScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-50)];
-    backScrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 44*settingArray.count+380);
     backScrollView.showsVerticalScrollIndicator = NO;
     backScrollView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:backScrollView];
     
-    profileImgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 200, 200)];
-    profileImgView.center = CGPointMake(self.view.bounds.size.width/2, 200);
+    CGFloat wid = self.view.bounds.size.width;
+    const CGFloat kImageSize = 48;
+    int curY = 0;
+    profileImgView = [[UIImageView alloc]initWithFrame:CGRectMake(wid/2-kImageSize/2, curY + 30, kImageSize, kImageSize)];
+    curY += 30 + kImageSize;
     profileImgView.backgroundColor = [UIColor clearColor];
     profileImgView.layer.masksToBounds = YES;
-    profileImgView.layer.cornerRadius = 100.0f;
+    profileImgView.layer.cornerRadius = kImageSize/2;
     [backScrollView addSubview:profileImgView];
     
-    userNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 80)];
-    userNameLabel.center = CGPointMake(self.view.bounds.size.width/2, profileImgView.center.y + profileImgView.frame.size.height/2+userNameLabel.frame.size.height/2);
-    userNameLabel.backgroundColor = [UIColor clearColor];
-    userNameLabel.text = @"@TK_u_nya";
-    userNameLabel.font = [UIFont fontWithName:@"Helvetica" size:[UIFont labelFontSize]+10];
-    userNameLabel.textAlignment = NSTextAlignmentCenter;
-    [backScrollView addSubview:userNameLabel];
+
+    nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, curY + 10, wid, 20)];
+    curY += 10 + nameLabel.frame.size.height;
+    nameLabel.backgroundColor = [UIColor clearColor];
+    nameLabel.font = [UIFont systemFontOfSize:16];
+    nameLabel.textAlignment = NSTextAlignmentCenter;
+    [backScrollView addSubview:nameLabel];
+
+    screenNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, curY, wid, 20)];
+    curY += screenNameLabel.frame.size.height;
+    screenNameLabel.backgroundColor = [UIColor clearColor];
+    screenNameLabel.font = [UIFont systemFontOfSize:12];
+    screenNameLabel.textAlignment = NSTextAlignmentCenter;
+    [backScrollView addSubview:screenNameLabel];
     
-    settingTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 380, self.view.bounds.size.width, 44*settingArray.count)];
+    settingTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, curY, self.view.bounds.size.width, 44*settingArray.count)];
+    curY += settingTableView.frame.size.height;
     settingTableView.delegate = self;
     settingTableView.dataSource = self;
     settingTableView.backgroundColor = [UIColor whiteColor];
     [backScrollView addSubview:settingTableView];
     [settingTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    
+    backScrollView.contentSize = CGSizeMake(self.view.bounds.size.width, curY);
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    
-    NSURL * imageURL = [NSURL URLWithString:@"http://hanayamata.com/assets/images/special/02.png"];
-    NSData * imageData = [NSData dataWithContentsOfURL:imageURL];
-    profileImgView.image = [UIImage imageWithData:imageData];
+    [self setUserInfo];
+}
+
+
+- (void)setUserInfo
+{
+    NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
+    screenNameLabel.text = [NSString stringWithFormat:@"@%@", [ud stringForKey:@"screen_name"]];
+    nameLabel.text = [ud stringForKey:@"name"];
+
+    NSURL * imageURL = [NSURL URLWithString:[ud stringForKey:@"profile_image_url"]];
+    NSLog(@"%@", imageURL);
+    [profileImgView sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"icon_hana"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        NSLog(@"image loaded");
+    }];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -93,6 +116,17 @@
     
     //セルの選択を解除（青くなるのを消す）
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if ([settingArray[indexPath.row] isEqualToString:@"ログアウト"]) {
+        [self logout];
+    }
+}
+
+- (void)logout
+{
+    [AuthManager sharedManager].auth = nil;
+    [GTMOAuthViewControllerTouch removeParamsFromKeychainForName:kKeychainAppServiceName];
+    UINavigationController *navc = [[UINavigationController alloc]initWithRootViewController:[[SigninViewController alloc]init]];
+    [self presentViewController:navc animated:YES completion:nil];
 }
 
 

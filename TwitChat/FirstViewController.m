@@ -30,10 +30,7 @@
     [super viewDidLoad];
     
     self.title = @"トーク";
-
-    NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
-    NSLog(@"ud : %@", [ud dictionaryRepresentation]);
-
+    
     groupArray = [[NSMutableArray alloc] init];
     
     groupTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-50)

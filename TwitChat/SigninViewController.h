@@ -12,6 +12,9 @@
 #import "AuthManager.h"
 #import "ServerManager.h"
 
+// KeyChain登録サービス名
+static NSString *const kKeychainAppServiceName = @"DMchat";
+
 @interface SigninViewController : UIViewController
 {
     GTMOAuthAuthentication* _auth;
